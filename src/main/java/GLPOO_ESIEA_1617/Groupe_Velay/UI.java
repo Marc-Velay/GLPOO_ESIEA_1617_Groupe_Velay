@@ -5,19 +5,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType.W;
+
 public class UI extends JPanel implements ActionListener {
     private Image rock;
     private Image terre;
     private int sizeX;
     private int sizeY;
     private int blocSize;
-    private int [][] gameMap;
+    private char [][] gameMap;
 
-    public UI(int sizeY, int sizeX, int blocSize, int [][]gameMap){
+    public UI(int sizeY, int sizeX, int blocSize, char [][]gameMap){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.blocSize = blocSize;
         this.gameMap = gameMap;
+        initMap();
         loadImages();
         afficheMapConsole();
     }
@@ -30,12 +33,11 @@ public class UI extends JPanel implements ActionListener {
     }
 
     public void afficheCarte(Graphics g){
-        System.out.println("TOO");
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                if (gameMap[y][x]==0)
+                if (gameMap[y][x]=='b')
                     afficherImage(rock,blocSize*x,blocSize*y,g);
-                else if (gameMap[y][x]==1)
+                else if (gameMap[y][x]=='0')
                    afficherImage(terre,x*blocSize,y*blocSize,g);
             }
         }
@@ -43,8 +45,9 @@ public class UI extends JPanel implements ActionListener {
 
     public void afficheMapConsole() {
         for (int y = 0; y<sizeY; y++){
-            for (int x = 0; x<sizeX; x++)
-                System.out.printf("%3d",gameMap[y][x]);
+            for (int x = 0; x<sizeX; x++){
+                System.out.printf("%c",gameMap[y][x]);
+            }
             System.out.println();
         }
     }
@@ -78,4 +81,25 @@ public class UI extends JPanel implements ActionListener {
         rock = chargerImage("mur");
         terre = chargerImage("terre");
     }
+
+    public void initMap(){
+        for (int y = 0; y<sizeY; y++){
+            for (int x = 0; x<sizeX; x++){
+                gameMap[y][x] = '0'; // 0 pour 0 oeuf
+            }
+        }
+        initBorderMap();
+    }
+
+    public void initBorderMap() {
+        for (int x = 0; x<sizeX; x++){
+            gameMap[0][x] = 'b';
+            gameMap[sizeY-1][x] = 'b'; // b pour bord
+        }
+        for (int y = 0; y<sizeY; y++){
+            gameMap[y][0] = 'b';
+            gameMap[y][sizeX-1] = 'b';
+        }
+    }
+
 }

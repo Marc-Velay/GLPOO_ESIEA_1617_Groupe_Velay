@@ -13,7 +13,7 @@ public class Garden extends JFrame{
     private int sizeY;
     private int blocSize;
     private int fps;
-    private int [][] gameMap;
+    private char [][] gameMap;
     private Scanner fic = null;
     private String filenameMap = "map.txt";
     private UI map;
@@ -23,12 +23,12 @@ public class Garden extends JFrame{
         loadMap();
         blocSize = 30;
         fps = 30;
-        gameMap = new int[sizeY+1][sizeX+1];this.setTitle("Garden");
+        gameMap = new char[sizeY][sizeX];
         map = new UI(sizeY,sizeX,blocSize,gameMap);
-
-        this.setSize(sizeX*blocSize, sizeY*blocSize);
+        this.setTitle("Garden");
+        this.setSize(sizeX*blocSize+15, sizeY*blocSize+38);
         this.setContentPane(map);
-        this.setResizable(false);
+       // this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -40,8 +40,9 @@ public class Garden extends JFrame{
     private void loadMap (){
         fic = openFile(filenameMap);
         fic.next();
-        sizeX = fic.nextInt();
-        sizeY = fic.nextInt();
+        sizeX = fic.nextInt() + 2; // pour les bords
+        sizeY = fic.nextInt() + 2; // pour les bords
+        System.out.println(sizeX + " " +sizeY);
     }
 
     private Scanner openFile (String nomFichier){
