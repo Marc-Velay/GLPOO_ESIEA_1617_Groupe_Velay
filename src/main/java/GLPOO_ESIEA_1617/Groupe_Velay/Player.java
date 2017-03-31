@@ -12,12 +12,12 @@ public interface Player {
 	public void moveDown();
 	public void moveRight();
 	public void moveLeft();
-	public void pickUp();
-	public void AddScore();
+	public void pickUp(int valEgg);
+	public void addScore(int val);
 	
-	public void setScore();
-	public void setPosX();
-	public void setPosY();
+	public void setScore(int score);
+	public void setPosX(int posX);
+	public void setPosY(int posY);
 	
 	public int getScore();
 	public int getPosX();
