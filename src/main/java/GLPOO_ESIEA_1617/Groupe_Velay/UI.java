@@ -5,11 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType.W;
-
 public class UI extends JPanel implements ActionListener {
     private Image rock;
     private Image terre;
+    private Image oeuf;
     private int sizeX;
     private int sizeY;
     private int blocSize;
@@ -20,7 +19,7 @@ public class UI extends JPanel implements ActionListener {
         this.sizeY = sizeY;
         this.blocSize = blocSize;
         this.gameMap = gameMap;
-        initMap();
+
         loadImages();
         afficheMapConsole();
     }
@@ -35,10 +34,12 @@ public class UI extends JPanel implements ActionListener {
     public void afficheCarte(Graphics g){
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                if (gameMap[y][x]=='b')
+                if (gameMap[y][x]=='b' || gameMap[y][x]=='r')
                     afficherImage(rock,blocSize*x,blocSize*y,g);
                 else if (gameMap[y][x]=='0')
                    afficherImage(terre,x*blocSize,y*blocSize,g);
+                else if (gameMap[y][x]>'0')
+                    afficherImage(oeuf,x*blocSize,y*blocSize,g);
             }
         }
     }
@@ -79,27 +80,10 @@ public class UI extends JPanel implements ActionListener {
 
     public void loadImages(){
         rock = chargerImage("mur");
+        oeuf = chargerImage("oeuf");
         terre = chargerImage("terre");
     }
 
-    public void initMap(){
-        for (int y = 0; y<sizeY; y++){
-            for (int x = 0; x<sizeX; x++){
-                gameMap[y][x] = '0'; // 0 pour 0 oeuf
-            }
-        }
-        initBorderMap();
-    }
 
-    public void initBorderMap() {
-        for (int x = 0; x<sizeX; x++){
-            gameMap[0][x] = 'b';
-            gameMap[sizeY-1][x] = 'b'; // b pour bord
-        }
-        for (int y = 0; y<sizeY; y++){
-            gameMap[y][0] = 'b';
-            gameMap[y][sizeX-1] = 'b';
-        }
-    }
 
 }
