@@ -9,12 +9,19 @@ public class UI extends JPanel{
     private int sizeX;
     private int sizeY;
     private int [][] gameMap;
+    private JFrame frame = null;
 
     public UI(int sizeY, int sizeX, int [][]gameMap){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.gameMap = gameMap;
+        loadImages();
         afficheMapConsole();
+        frame = new JFrame();
+        frame.setLayout(new BorderLayout());
+        frame.setSize(new Dimension(sizeX*30,sizeY*30));
+        frame.setVisible(true);
+        repaint();
     }
 
     public void afficheObjects(Graphics g){
@@ -51,7 +58,20 @@ public class UI extends JPanel{
 
     @Override
     public void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
+        afficheCarte(g);
 
+    }
+
+    public Image chargerImage(String nomImg) {
+        Image img;
+        System.out.println("Images/"+nomImg+".png");
+        ImageIcon imageIcon = new ImageIcon("Image/"+nomImg+".png");
+        img = imageIcon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
+        return img;
+    }
+
+    public void loadImages(){
+        rock = chargerImage("rock");
+        terre = chargerImage("terre");
     }
 }

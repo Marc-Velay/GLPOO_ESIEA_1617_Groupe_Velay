@@ -1,7 +1,6 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,13 +42,7 @@ public class Garden extends JPanel{
         return null;
     }
 
-    public Image chargerImage(String nomImg) {
-        Image img;
-        System.out.println("Image/"+nomImg+".png");
-        ImageIcon imageIcon = new ImageIcon("Image/"+nomImg+".png");
-        img = imageIcon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
-        return img;
-    }
+
 
 
 }
