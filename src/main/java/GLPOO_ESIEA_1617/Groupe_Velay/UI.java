@@ -9,6 +9,7 @@ public class UI extends JPanel implements ActionListener {
     private Image rock;
     private Image terre;
     private Image oeuf;
+    private Font font = new Font("Courier", Font.BOLD, 20);
     private int sizeX;
     private int sizeY;
     private int blocSize;
@@ -32,14 +33,19 @@ public class UI extends JPanel implements ActionListener {
     }
 
     public void afficheCarte(Graphics g){
+        g.setFont(font);
+        g.setColor(Color.black);
+
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
                 if (gameMap[y][x]=='b' || gameMap[y][x]=='r')
                     afficherImage(rock,blocSize*x,blocSize*y,g);
                 else if (gameMap[y][x]=='0')
                    afficherImage(terre,x*blocSize,y*blocSize,g);
-                else if (gameMap[y][x]>'0')
+                else if (gameMap[y][x]>'0'){
                     afficherImage(oeuf,x*blocSize,y*blocSize,g);
+                    g.drawString(String.valueOf(gameMap[y][x]), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ public class Garden extends JFrame{
 
     public Garden () {
         loadMap();
-        blocSize = 30;
+        blocSize = 50;
         fps = 30;
         gameMap = new char[sizeY][sizeX];
         map = new UI(sizeY,sizeX,blocSize,gameMap);
