@@ -1,25 +1,37 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-public class Garden extends JPanel{
+public class Garden extends JFrame{
     private int sizeX;
     private int sizeY;
     private int [][] gameMap;
     private Scanner fic = null;
     private String filenameMap = "map.txt";
-    private UI ui;
+    private UI map;
 
 
     public Garden () {
         loadMap();
-        gameMap = new int[sizeY][sizeX];
-        ui = new UI(sizeY,sizeX,gameMap);
+
+        gameMap = new int[sizeY][sizeX];this.setTitle("Garden");
+        map = new UI(sizeY,sizeX,gameMap);
+
+        this.setSize(sizeX*30, sizeY*30);
+        this.setContentPane(map);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        Timer tRepaint = new Timer(100, (ActionListener) map);
+        tRepaint.start();
     }
 
     private void loadMap (){
