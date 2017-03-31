@@ -11,6 +11,8 @@ import java.util.Scanner;
 public class Garden extends JFrame{
     private int sizeX;
     private int sizeY;
+    private int blocSize;
+    private int fps;
     private int [][] gameMap;
     private Scanner fic = null;
     private String filenameMap = "map.txt";
@@ -19,18 +21,19 @@ public class Garden extends JFrame{
 
     public Garden () {
         loadMap();
+        blocSize = 30;
+        fps = 30;
+        gameMap = new int[sizeY+1][sizeX+1];this.setTitle("Garden");
+        map = new UI(sizeY,sizeX,blocSize,gameMap);
 
-        gameMap = new int[sizeY][sizeX];this.setTitle("Garden");
-        map = new UI(sizeY,sizeX,gameMap);
-
-        this.setSize(sizeX*30, sizeY*30);
+        this.setSize(sizeX*blocSize, sizeY*blocSize);
         this.setContentPane(map);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        Timer tRepaint = new Timer(100, (ActionListener) map);
+        Timer tRepaint = new Timer(1000/fps, (ActionListener) map);
         tRepaint.start();
     }
 

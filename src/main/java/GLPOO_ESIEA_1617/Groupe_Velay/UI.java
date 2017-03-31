@@ -5,18 +5,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
-
 public class UI extends JPanel implements ActionListener {
-    protected Image rock;
-    protected Image terre;
+    private Image rock;
+    private Image terre;
     private int sizeX;
     private int sizeY;
+    private int blocSize;
     private int [][] gameMap;
 
-    public UI(int sizeY, int sizeX, int [][]gameMap){
+    public UI(int sizeY, int sizeX, int blocSize, int [][]gameMap){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.blocSize = blocSize;
         this.gameMap = gameMap;
         loadImages();
         afficheMapConsole();
@@ -33,10 +33,10 @@ public class UI extends JPanel implements ActionListener {
         System.out.println("TOO");
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-               // if (gameMap[y][x]==0)
-                    afficherImage(rock,30*x,30*y,g);
-                //else if (gameMap[y][x]==1)
-                //   afficherImage(terre,x*30,y*30,g);
+                if (gameMap[y][x]==0)
+                    afficherImage(rock,blocSize*x,blocSize*y,g);
+                else if (gameMap[y][x]==1)
+                   afficherImage(terre,x*blocSize,y*blocSize,g);
             }
         }
     }
@@ -70,7 +70,7 @@ public class UI extends JPanel implements ActionListener {
         Image img;
         System.out.println("Images/"+nomImg+".png");
         ImageIcon imageIcon = new ImageIcon("Images/"+nomImg+".png");
-        img = imageIcon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
+        img = imageIcon.getImage().getScaledInstance(blocSize, blocSize, Image.SCALE_DEFAULT);
         return img;
     }
 
