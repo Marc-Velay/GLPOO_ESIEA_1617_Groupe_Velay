@@ -12,5 +12,7 @@
 hs_err_pid*
 /target/
 
-# Ignore idea folder
-/*.idea/
+# Ignore ideaJ & eclipse specific folders folder
+/.idea/
+/.settings/
+.classpath
