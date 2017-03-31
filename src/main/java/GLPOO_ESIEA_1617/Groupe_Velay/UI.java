@@ -3,6 +3,8 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
 import javax.swing.*;
 import java.awt.*;
 
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+
 public class UI extends JPanel{
     protected Image rock;
     protected Image terre;
@@ -18,10 +20,11 @@ public class UI extends JPanel{
         loadImages();
         afficheMapConsole();
         frame = new JFrame();
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setSize(new Dimension(sizeX*30,sizeY*30));
         frame.setVisible(true);
-        repaint();
+        frame.repaint();
     }
 
     public void afficheObjects(Graphics g){
