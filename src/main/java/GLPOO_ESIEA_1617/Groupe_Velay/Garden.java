@@ -16,13 +16,16 @@ public class Garden extends JFrame{
     private int fps;
     private char [][] gameMap;
     private Scanner fic = null;
-    private String filenameMap = "map.txt";
+    private String filenameMap = "Ressources/map.txt";
     private UI map;
 
 
     public Garden () {
+
+    }
+
+    protected void init(){
         loadMap();
-        blocSize = 50;
         fps = 30;
         gameMap = new char[sizeY][sizeX];
         map = new UI(sizeY,sizeX,blocSize,gameMap);
@@ -39,7 +42,10 @@ public class Garden extends JFrame{
         tRepaint.start();
     }
 
-    private void loadMap (){
+
+
+    public void loadMap (){
+        blocSize = 50;
         fic = openFile(filenameMap);
         fic.next();
         sizeX = fic.nextInt() + 2; // pour les bords
@@ -61,7 +67,7 @@ public class Garden extends JFrame{
         return null;
     }
 
-    private void initMap(){
+    protected void initMap(){
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
                 gameMap[y][x] = '0'; // 0 pour 0 oeuf
@@ -117,6 +123,68 @@ public class Garden extends JFrame{
     }
 
 
+    public int getSizeX() {
+        return sizeX;
+    }
 
+    public void setSizeX(int sizeX) {
+        this.sizeX = sizeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public void setSizeY(int sizeY) {
+        this.sizeY = sizeY;
+    }
+
+    public int getBlocSize() {
+        return blocSize;
+    }
+
+    public void setBlocSize(int blocSize) {
+        this.blocSize = blocSize;
+    }
+
+    public int getFps() {
+        return fps;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
+    }
+
+    public char[][] getGameMap() {
+        return gameMap;
+    }
+
+    public void setGameMap(char[][] gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    public Scanner getFic() {
+        return fic;
+    }
+
+    public void setFic(Scanner fic) {
+        this.fic = fic;
+    }
+
+    public String getFilenameMap() {
+        return filenameMap;
+    }
+
+    public void setFilenameMap(String filenameMap) {
+        this.filenameMap = filenameMap;
+    }
+
+    public UI getMap() {
+        return map;
+    }
+
+    public void setMap(UI map) {
+        this.map = map;
+    }
 
 }
