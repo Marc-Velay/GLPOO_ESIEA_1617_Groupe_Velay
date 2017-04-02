@@ -1,39 +1,55 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
-public class MapObjects {
-	
-	private int posX;
-	private int posY;
-	private int score;
-	private String name;
-	
-	MapObjects(final String name, final int score, int posX, int posY) {
-		this.name = name;
-		this.score = score;
-		this.posX = posX;
-		this.posY = posY;
-	}
-	
-	public void setCoords(int posX, int posY) {
-	}
+import java.util.ArrayList;
 
-	public int getX() {
-		return this.posX;
-	}
+public class MapObjects {
+
+	private ArrayList<Egg> listEgg;
+	private Obj obj;
+	private boolean busy;
+	private int numberEggs;
+
+
+    public Obj getObj() {
+        return obj;
+    }
+
+    public void setObj(Obj obj) {
+        this.obj = obj;
+    }
+
+    public MapObjects() {
+        listEgg = new ArrayList<Egg>();
+        numberEggs = 0;
+        obj = Obj.JARDIN;
+        busy = false;
+    }
+
+    public ArrayList<Egg> getListEgg() {
+        return listEgg;
+    }
+
+    public void setListEgg(ArrayList<Egg> listEgg) {
+        this.listEgg = listEgg;
+    }
+
+    public boolean isBusy() {
+        return busy;
+    }
+
+    public void setBusy(boolean busy) {
+        this.busy = busy;
+    }
+
+    public int getNumberEggs() {
+        return numberEggs;
+    }
+
+    public void setNumberEggs(int numberEggs) {
+        this.numberEggs = numberEggs;
+    }
+
+
+
 	
-	public int getY() {
-		return this.posY;
-	}
-	
-	public boolean getPickable() {
-		if(this.score > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public String getName() {
-		return this.name;
-	}
 }

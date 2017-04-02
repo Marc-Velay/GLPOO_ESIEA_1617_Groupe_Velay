@@ -2,9 +2,9 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
 
 public abstract class Character implements Player, AI {
 	
-	int score = 0;
-	int posX = 0;
-	int posY = 0;
+	protected int score = 0;
+	protected int posX = 0;
+	protected int posY = 0;
 	
 	
 	public void movePlayer(char dir){
