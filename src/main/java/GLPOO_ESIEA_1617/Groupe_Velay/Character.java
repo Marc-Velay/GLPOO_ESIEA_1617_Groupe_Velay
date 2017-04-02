@@ -16,25 +16,7 @@ public abstract class Character implements Player, AI {
 
     protected String name = "";
     protected char direction = ' ';
-	
-	
-	public void movePlayer(char dir){
-		switch (dir){
-			case 't':
-				moveTop();
-				break;	
-			case 'd':
-				moveDown();
-				break;
-			case 'l':
-				moveLeft();
-				break;
-			case 'r':
-				moveRight();
-				break;
-		}
-		
-	}
+
 	
 	public void moveTop(){
 		posY -= 1;
@@ -65,6 +47,9 @@ public abstract class Character implements Player, AI {
 		score += val;
 		
 	}
+    public void movePlayer(char dir) {
+
+    }
 	
 	public int getScore() {
 		return score;

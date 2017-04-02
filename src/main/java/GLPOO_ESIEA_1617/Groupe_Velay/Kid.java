@@ -21,6 +21,7 @@ public class Kid extends Character {
 
     private ArrayList<java.lang.Character> path;
 
+
     public Kid(){
         path = new ArrayList<java.lang.Character>();
     }
@@ -31,22 +32,67 @@ public class Kid extends Character {
         setDirection(direction);
     }
 
-    public void move(char dir){
-        switch (dir){
-            case 't':
-                moveTop();
-                break;
-            case 'd':
-                moveDown();
-                break;
-            case 'l':
-                moveLeft();
-                break;
-            case 'r':
-                moveRight();
-                break;
-        }
+    public void move(MapObjects [][] gameMap){
+        if (!path.isEmpty()) {
+            final char dir = path.get(0);
+            path.remove(0);
+            switch (dir) {
+                case 'D':
+                    System.out.println("Tourne à droite");
+                    switch (direction) {
+                        case 'N':
+                            direction = 'E';
+                            break;
+                        case 'E':
+                            direction = 'S';
+                            break;
+                        case 'S':
+                            direction = 'W';
+                            break;
+                        case 'W':
+                            direction = 'N';
+                            break;
+                    }
+                    break;
+                case 'G':
+                    System.out.println("Tourne à gauche");
+                    switch (direction) {
+                        case 'N':
+                            direction = 'W';
+                            break;
+                        case 'E':
+                            direction = 'N';
+                            break;
+                        case 'S':
+                            direction = 'E';
+                            break;
+                        case 'W':
+                            direction = 'S';
+                            break;
+                    }
+                    break;
+                case 'A':
+                    System.out.println("Avance");
+                    switch (direction) {
+                        case 'N':
+                            moveTop();
+                            break;
+                        case 'E':
+                            moveRight();
+                            break;
+                        case 'W':
+                            moveLeft();
+                            break;
+                        case 'S':
+                            moveDown();
+                            break;
+                    }
 
+            }
+            System.out.println("Direction = " + direction);
+        } else {
+            System.out.println("Path is empty");
+        }
     }
 
     @Override
@@ -58,4 +104,6 @@ public class Kid extends Character {
                 ", path=" + path +
                 '}';
     }
+
+
 }

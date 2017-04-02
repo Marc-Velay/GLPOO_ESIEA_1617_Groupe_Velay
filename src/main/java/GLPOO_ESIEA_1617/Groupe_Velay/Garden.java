@@ -53,7 +53,7 @@ public class Garden extends JFrame{
         listKid = new ArrayList<Kid>();
         loadMap();
 
-        fps = 30;
+        fps = 1;
         gameMapO = new MapObjects[sizeY][sizeX];
 
         map = new UI(sizeY,sizeX,blocSize,gameMapO, listKid);

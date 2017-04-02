@@ -68,12 +68,9 @@ public class UI extends JPanel implements ActionListener {
 
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
+                afficherImage(terre,x*blocSize,y*blocSize,g); // On affiche la terre partout
                 if (gameMapO[y][x].getObj().equals(Obj.ROCK))
                     afficherImage(rock,blocSize*x,blocSize*y,g);
-                else if (gameMapO[y][x].getObj().equals(Obj.JARDIN))
-                    afficherImage(terre,x*blocSize,y*blocSize,g);
-                //else if (gameMapO[y][x].getObj().equals(Obj.KID))
-                    //drawKids(x*blocSize,y*blocSize, g);
                 else if (gameMapO[y][x].getObj().equals(Obj.EGG)){
                     afficherImage(oeuf,x*blocSize,y*blocSize,g);
                     g.drawString(String.valueOf(gameMapO[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
@@ -136,6 +133,9 @@ public class UI extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        for (Kid kid : listKid){
+            kid.move(gameMapO);
+        }
         //System.out.println("time B : " + System.currentTimeMillis());
         repaint();
     }
