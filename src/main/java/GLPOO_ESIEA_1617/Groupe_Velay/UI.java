@@ -4,18 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class UI extends JPanel implements ActionListener {
     private Image rock;
     private Image terre;
     private Image oeuf;
+    private Image kidE;
+    private Image kidW;
+    private Image kidS;
+    private Image kidN;
     private Font font = new Font("Courier", Font.BOLD, 20);
     private int sizeX;
     private int sizeY;
     private int blocSize;
     private char [][] gameMap;
     private MapObjects [][] gameMapO;
+    private ArrayList<Kid> listKid;
 
 
     public UI(int sizeY, int sizeX, int blocSize, char [][]gameMap){
@@ -27,12 +33,12 @@ public class UI extends JPanel implements ActionListener {
         loadImages();
         afficheMapConsole();
     }
-    public UI(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMapO){
+    public UI(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMapO, ArrayList<Kid> listKid){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.blocSize = blocSize;
         this.gameMapO = gameMapO;
-
+        this.listKid = listKid;
         loadImages();
        // afficheMapConsoleO();
     }
@@ -66,12 +72,19 @@ public class UI extends JPanel implements ActionListener {
                     afficherImage(rock,blocSize*x,blocSize*y,g);
                 else if (gameMapO[y][x].getObj().equals(Obj.JARDIN))
                     afficherImage(terre,x*blocSize,y*blocSize,g);
+                //else if (gameMapO[y][x].getObj().equals(Obj.KID))
+                    //drawKids(x*blocSize,y*blocSize, g);
                 else if (gameMapO[y][x].getObj().equals(Obj.EGG)){
+                    afficherImage(oeuf,x*blocSize,y*blocSize,g);
+                    g.drawString(String.valueOf(gameMapO[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
+                } else if (gameMapO[y][x].getObj().equals(Obj.EGGANDKID)){
                     afficherImage(oeuf,x*blocSize,y*blocSize,g);
                     g.drawString(String.valueOf(gameMapO[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
                 }
             }
         }
+
+        drawKids(g);
     }
 
     public void afficheMapConsole() {
@@ -80,6 +93,24 @@ public class UI extends JPanel implements ActionListener {
                 System.out.printf("%c",gameMap[y][x]);
             }
             System.out.println();
+        }
+    }
+    private void drawKids(Graphics g){
+        for (Kid kid : listKid){
+            switch (kid.getDirection()){
+                case 'E':
+                    afficherImage(kidE,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
+                    break;
+                case 'N':
+                    afficherImage(kidN,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
+                    break;
+                case 'W':
+                    afficherImage(kidW,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
+                    break;
+                case 'S':
+                    afficherImage(kidS,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
+                    break;
+            }
         }
     }
 
@@ -121,6 +152,10 @@ public class UI extends JPanel implements ActionListener {
         rock  = chargerImage("mur");
         oeuf  = chargerImage("oeuf");
         terre = chargerImage("terre");
+        kidE = chargerImage("E1");
+        kidW = chargerImage("O1");
+        kidS = chargerImage("S1");
+        kidN = chargerImage("N1");
     }
 
 

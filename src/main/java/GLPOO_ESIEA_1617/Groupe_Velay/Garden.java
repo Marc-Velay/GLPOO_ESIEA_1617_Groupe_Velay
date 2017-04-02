@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.*;
+import java.lang.Character;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -51,11 +52,11 @@ public class Garden extends JFrame{
     protected void initO(){
         listKid = new ArrayList<Kid>();
         loadMap();
-        //loadKids();
+
         fps = 30;
         gameMapO = new MapObjects[sizeY][sizeX];
-        if (gameMapO == null) System.out.print("NULLLLLLLLLLLLLL");
-        map = new UI(sizeY,sizeX,blocSize,gameMapO);
+
+        map = new UI(sizeY,sizeX,blocSize,gameMapO, listKid);
         initMapO();
         this.setTitle("Garden");
         this.setSize(sizeX*blocSize+5, sizeY*blocSize+28);
@@ -81,15 +82,13 @@ public class Garden extends JFrame{
         fic.close();
     }
 
-    public void loadKids(){
+    protected void loadKids(){
         String line = "";
-        char type = ' ';
-        int posX = 0, posY = 0, number = 0;
         fic = openFile(filenameKids);
         while (fic.hasNextLine()){
             line = fic.nextLine();
             System.out.print(line);
-            addKid(line);
+            addKidO(line);
         }
         fic.close();
     }
@@ -125,6 +124,9 @@ public class Garden extends JFrame{
         }
         initBorderMapO();
         loadEggsAndRockO();
+        loadKids();
+        for (Kid kid : listKid)
+            System.out.println(kid);
     }
 
     private void initBorderMap() {
@@ -206,44 +208,88 @@ public class Garden extends JFrame{
     }
 
     private void addChocolate (int posX, int posY, char number){
-        gameMap[posY][posX] = java.lang.Character.toChars(number)[0];
+        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
+            gameMap[posY][posX] = java.lang.Character.toChars(number)[0];
+        }
     }
 
     private void addRock (int posX, int posY){
-        gameMap[posY][posX] = 'r';
+        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
+            gameMap[posY][posX] = 'r';
+        } else {
+            System.out.println("Chargement d'un rocher en dehors du terrain : MISSED");
+        }
     }
 
     private void addChocolateO (int posX, int posY, char number){
-        final int nbEgg = java.lang.Character.toChars(number)[0];
-        gameMapO[posY][posX].setNumberEggs(nbEgg);
-        gameMapO[posY][posX].setObj(Obj.EGG);
-
-        for (int egg=0; egg<nbEgg; egg++) {
-            gameMapO[posY][posX].getListEgg().add(new Egg());
-
+        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
+            final int nbEgg = java.lang.Character.toChars(number)[0];
+            gameMapO[posY][posX].setNumberEggs(nbEgg);
+            gameMapO[posY][posX].setObj(Obj.EGG);
+            for (int egg = 0; egg < nbEgg; egg++) {
+                gameMapO[posY][posX].getListEgg().add(new Egg());
+            }
+        } else {
+            System.out.println("Chargement d'un oeuf en dehors du terrain : WHAT A WASTE");
         }
     }
 
     private void addRockO (int posX, int posY){
-        gameMapO[posY][posX].setBusy(true);
-        gameMapO[posY][posX].setObj(Obj.ROCK);
+        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
+            gameMapO[posY][posX].setBusy(true);
+            gameMapO[posY][posX].setObj(Obj.ROCK);
+        } else {
+            System.out.println("Chargement d'un rocher en dehors du terrain : MISSED");
+        }
+    }
+
+    private void addKidO(String line){
+
+        int posX = line.charAt(2)-'0';
+        int posY = line.charAt(4)-'0';
+        System.out.println("KOKO"+ posX + " " + posY);
+
+        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
+            if (gameMapO[posY][posX].isBusy()) {
+                System.out.println("Chargement d'un enfant sur un rocher : FIRST BLOOD");
+            }
+            else {
+                Kid kid = new Kid();
+                final char direction = line.charAt(6);
+                kid.initPos(posX,posY,direction);
+                ArrayList<Character> name = new ArrayList<Character>();
+                int index = 8;
+                boolean stop = false;
+                char c = ' ';
+                do{
+                    c = line.charAt(index);
+                    if (c == ' ') stop = true;
+                    if (c == 'A' || c == 'G' || c == 'D') kid.getPath().add(c);
+                    else stop = true;
+                    index++;
+                } while (!stop);
+                stop = false;
+                do{
+                    c = line.charAt(index);
+                    name.add(c);
+                    index++;
+                    if (line.length()==index) stop = true;
+                } while (!stop);
+                kid.setName(name.toString());
+                if (gameMapO[posY][posX].getObj().equals(Obj.EGG))  gameMapO[posY][posX].setObj(Obj.EGGANDKID);
+                else gameMapO[posY][posX].setObj(Obj.KID);
+                listKid.add(kid);
+            }
+        } else {
+            System.out.println("Chargement d'un enfant en dehors du terrain");
+        }
     }
 
     private void addKid(String line){
         Kid kid = new Kid();
         final int posX = line.charAt(2)-'0';
         final int posY = line.charAt(4)-'0';
-        kid.initPos(posX,posY);
-        listKid.add(kid);
-    }
-
-    private void addKidO(String line){
-        Kid kid = new Kid();
-        final int posX = line.charAt(2)-'0';
-        final int posY = line.charAt(4)-'0';
-        gameMapO[posY][posX].setBusy(true);
-        gameMapO[posY][posX].setObj(Obj.KID);
-        kid.initPos(posX,posY);
+        kid.initPos(posX,posY,'E');
         listKid.add(kid);
     }
 
