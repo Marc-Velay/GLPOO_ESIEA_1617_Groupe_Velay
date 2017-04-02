@@ -17,9 +17,14 @@ public abstract class Character implements AI {
     protected String name = "";
     protected char direction = ' ';
 
-    private void moveAction(MapObjects [][]gameMap, int valX, int valY){
+    private void moveAction(MapObjects [][]gameMap, int valX, int valY, Kid kid){
         if (gameMap[posY+valY][posX+valX].isBusy()){
             System.out.println(valX + " " + valY + " BUSY");
+            if (gameMap[posY+valY][posX+valX].getObj().equals(Obj.KID)){
+                System.out.println("KID DETECTED :  GOING on Pause mode");
+            } else {
+                kid.getPath().remove(0);
+            }
         } else{
             gameMap[posY+valY][posX+valX].setBusy(true);
             gameMap[posY][posX].setBusy(false);
@@ -31,24 +36,25 @@ public abstract class Character implements AI {
             }
             posY += valY;
             posX += valX;
+            kid.getPath().remove(0);
         }
 
     }
 
-	public void moveTop(MapObjects [][]gameMap){
-        moveAction(gameMap,0,-1);
+	public void moveTop(MapObjects [][]gameMap, Kid kid){
+        moveAction(gameMap,0,-1, kid);
 	}
 	
-	public void moveDown(MapObjects [][]gameMap){
-        moveAction(gameMap,0,1);
+	public void moveDown(MapObjects [][]gameMap, Kid kid){
+        moveAction(gameMap,0,1, kid);
 	}
 	
-	public void moveRight(MapObjects [][]gameMap){
-        moveAction(gameMap,1,0);
+	public void moveRight(MapObjects [][]gameMap, Kid kid){
+        moveAction(gameMap,1,0, kid);
 	}
 	
-	public void moveLeft(MapObjects [][]gameMap){
-        moveAction(gameMap,-1,0);
+	public void moveLeft(MapObjects [][]gameMap, Kid kid){
+        moveAction(gameMap,-1,0, kid);
 	}
 	
 	public void pickUp(int valEgg){

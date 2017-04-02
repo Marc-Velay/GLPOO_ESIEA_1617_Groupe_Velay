@@ -49,9 +49,10 @@ public class Kid extends Character {
         }
         else if (!path.isEmpty()) {
             final char dir = path.get(0);
-            path.remove(0);
+            System.out.println(this);
             switch (dir) {
                 case 'D':
+                    path.remove(0);
                     System.out.println("Tourne à droite");
                     switch (direction) {
                         case 'N':
@@ -69,6 +70,7 @@ public class Kid extends Character {
                     }
                     break;
                 case 'G':
+                    path.remove(0);
                     System.out.println("Tourne à gauche");
                     switch (direction) {
                         case 'N':
@@ -89,16 +91,16 @@ public class Kid extends Character {
                     System.out.println("Avance");
                     switch (direction) {
                         case 'N':
-                            moveTop(gameMap);
+                            moveTop(gameMap,this);
                             break;
                         case 'E':
-                            moveRight(gameMap);
+                            moveRight(gameMap,this);
                             break;
                         case 'W':
-                            moveLeft(gameMap);
+                            moveLeft(gameMap,this);
                             break;
                         case 'S':
-                            moveDown(gameMap);
+                            moveDown(gameMap,this);
                             break;
                     }
 
