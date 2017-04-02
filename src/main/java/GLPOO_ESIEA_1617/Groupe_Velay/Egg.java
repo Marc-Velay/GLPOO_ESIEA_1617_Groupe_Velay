@@ -5,5 +5,8 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
  */
 
 public class Egg {
-
+    @Override
+    public String toString() {
+        return "Egg{}";
+    }
 }

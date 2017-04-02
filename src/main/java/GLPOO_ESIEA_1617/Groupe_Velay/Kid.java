@@ -1,5 +1,6 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,10 +21,34 @@ public class Kid extends Character {
     }
 
     private ArrayList<java.lang.Character> path;
+    private ArrayList<Egg> listEgg;
+
+    public JLabel getJname() {
+        return Jname;
+    }
+
+    public void setJname(JLabel jname) {
+        Jname = jname;
+    }
+
+    private JLabel Jname;
+
+    public JProgressBar getjBar() {
+        return jBar;
+    }
+
+    public void setjBar(JProgressBar jBar) {
+        this.jBar = jBar;
+    }
+
+    private JProgressBar jBar;
 
 
-    public Kid(){
+    public Kid(int max){
         path = new ArrayList<java.lang.Character>();
+        listEgg = new ArrayList<Egg>();
+        jBar = new JProgressBar(0,max);
+        Jname = new JLabel();
     }
 
     public void initPos(int posX, int posY, char direction){
@@ -38,6 +63,9 @@ public class Kid extends Character {
         if (nbEgg>0){
             gameMap[posY][posX].setNumberEggs(nbEgg-1);
             if (nbEgg-1==0) gameMap[posY][posX].setObj(Obj.KID);
+            listEgg.add(gameMap[posY][posX].getListEgg().get(0));
+            gameMap[posY][posX].getListEgg().remove(0);
+            jBar.setValue(jBar.getValue()+1);
             return true;
         }
         return false;
@@ -107,14 +135,16 @@ public class Kid extends Character {
             }
             System.out.println("Direction = " + direction);
         } else {
-            System.out.println("Path is empty");
+            System.out.println("Path is empty" + listEgg);
+
         }
     }
 
     @Override
     public String toString() {
         return "Kid{" +
-                "posX=" + posX +
+                "Name=" + name +
+                ", posX=" + posX +
                 ", posY=" + posY +
                 ", direction=" + direction +
                 ", path=" + path +

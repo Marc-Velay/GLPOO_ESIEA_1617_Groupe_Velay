@@ -1,6 +1,7 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +22,10 @@ public class Garden extends JFrame{
     private String filenameMap = "Ressources/map.txt";
     private String filenameKids = "Ressources/kids.txt";
     private UI map;
+    private HUD hud;
     private ArrayList<Kid> listKid;
+    private ArrayList<Kid> listKidDone;
+    private int maxEgg;
 
 
     public Garden () {
@@ -30,16 +34,19 @@ public class Garden extends JFrame{
 
     protected void init(){
         listKid = new ArrayList<Kid>();
+        listKidDone = new ArrayList<Kid>();
         loadMap();
-
         fps = 1;
+        maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
 
         map = new UI(sizeY,sizeX,blocSize,gameMap,listKid);
-        initMapO();
+        hud = new HUD();
+        initMap();
         this.setTitle("Garden");
-        this.setSize(sizeX*blocSize+5, sizeY*blocSize+28);
-        this.setContentPane(map);
+        this.setSize(sizeX*blocSize, sizeY*blocSize+100);
+        this.add(map, BorderLayout.CENTER);
+        this.add(hud, BorderLayout.SOUTH);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -86,7 +93,7 @@ public class Garden extends JFrame{
     }
 
 
-    protected void initMapO(){
+    protected void initMap(){
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
                 gameMap[y][x] = new MapObjects();
@@ -97,6 +104,7 @@ public class Garden extends JFrame{
         loadKids();
         for (Kid kid : listKid)
             System.out.println(kid);
+        hud.init(listKid);
     }
     private void initBorderMap() {
         for (int x = 0; x<sizeX; x++){
@@ -147,6 +155,7 @@ public class Garden extends JFrame{
             gameMap[posY][posX].setObj(Obj.EGG);
             for (int egg = 0; egg < nbEgg; egg++) {
                 gameMap[posY][posX].getListEgg().add(new Egg());
+                maxEgg++;
             }
         } else {
             System.out.println("Chargement d'un oeuf en dehors du terrain : WHAT A WASTE");
@@ -173,7 +182,7 @@ public class Garden extends JFrame{
                 System.out.println("Chargement d'un enfant sur un rocher : FIRST BLOOD");
             }
             else {
-                Kid kid = new Kid();
+                Kid kid = new Kid(maxEgg);
                 final char direction = line.charAt(6);
                 kid.initPos(posX,posY,direction);
                 ArrayList<Character> name = new ArrayList<Character>();

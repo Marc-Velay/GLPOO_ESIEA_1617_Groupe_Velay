@@ -38,37 +38,27 @@ public abstract class Character implements AI {
             posX += valX;
             kid.getPath().remove(0);
         }
-
     }
 
-	public void moveTop(MapObjects [][]gameMap, Kid kid){
+	protected void moveTop(MapObjects [][]gameMap, Kid kid){
         moveAction(gameMap,0,-1, kid);
 	}
 	
-	public void moveDown(MapObjects [][]gameMap, Kid kid){
+	protected void moveDown(MapObjects [][]gameMap, Kid kid){
         moveAction(gameMap,0,1, kid);
 	}
 	
-	public void moveRight(MapObjects [][]gameMap, Kid kid){
+	protected void moveRight(MapObjects [][]gameMap, Kid kid){
         moveAction(gameMap,1,0, kid);
 	}
 	
-	public void moveLeft(MapObjects [][]gameMap, Kid kid){
+	protected void moveLeft(MapObjects [][]gameMap, Kid kid){
         moveAction(gameMap,-1,0, kid);
-	}
-	
-	public void pickUp(int valEgg){
-		addScore(valEgg);
-		
 	}
 	
 	public void addScore(int val){
 		score += val;
-		
 	}
-    public void movePlayer(char dir) {
-
-    }
 	
 	public int getScore() {
 		return score;
