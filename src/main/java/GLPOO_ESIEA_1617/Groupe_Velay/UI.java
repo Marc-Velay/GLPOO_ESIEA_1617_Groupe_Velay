@@ -19,28 +19,18 @@ public class UI extends JPanel implements ActionListener {
     private int sizeX;
     private int sizeY;
     private int blocSize;
-    private char [][] gameMap;
-    private MapObjects [][] gameMapO;
+    private MapObjects [][] gameMap;
     private ArrayList<Kid> listKid;
 
 
-    public UI(int sizeY, int sizeX, int blocSize, char [][]gameMap){
+
+    public UI(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMap, ArrayList<Kid> listKid){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.blocSize = blocSize;
         this.gameMap = gameMap;
-
-        loadImages();
-        afficheMapConsole();
-    }
-    public UI(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMapO, ArrayList<Kid> listKid){
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-        this.blocSize = blocSize;
-        this.gameMapO = gameMapO;
         this.listKid = listKid;
         loadImages();
-       // afficheMapConsoleO();
     }
 
 
@@ -50,33 +40,15 @@ public class UI extends JPanel implements ActionListener {
 
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                if (gameMap[y][x]=='b' || gameMap[y][x]=='r')
-                    afficherImage(rock,blocSize*x,blocSize*y,g);
-                else if (gameMap[y][x]=='0')
-                   afficherImage(terre,x*blocSize,y*blocSize,g);
-                else if (gameMap[y][x]>'0'){
-                    afficherImage(oeuf,x*blocSize,y*blocSize,g);
-                    g.drawString(String.valueOf(gameMap[y][x]), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
-                }
-            }
-        }
-    }
-
-    public void afficheCarteO(Graphics g){
-        g.setFont(font);
-        g.setColor(Color.black);
-
-        for (int y = 0; y<sizeY; y++){
-            for (int x = 0; x<sizeX; x++){
                 afficherImage(terre,x*blocSize,y*blocSize,g); // On affiche la terre partout
-                if (gameMapO[y][x].getObj().equals(Obj.ROCK))
+                if (gameMap[y][x].getObj().equals(Obj.ROCK))
                     afficherImage(rock,blocSize*x,blocSize*y,g);
-                else if (gameMapO[y][x].getObj().equals(Obj.EGG)){
+                else if (gameMap[y][x].getObj().equals(Obj.EGG)){
                     afficherImage(oeuf,x*blocSize,y*blocSize,g);
-                    g.drawString(String.valueOf(gameMapO[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
-                } else if (gameMapO[y][x].getObj().equals(Obj.EGGANDKID)){
+                    g.drawString(String.valueOf(gameMap[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
+                } else if (gameMap[y][x].getObj().equals(Obj.EGGANDKID)){
                     afficherImage(oeuf,x*blocSize,y*blocSize,g);
-                    g.drawString(String.valueOf(gameMapO[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
+                    g.drawString(String.valueOf(gameMap[y][x].getNumberEggs()), x*blocSize+4*blocSize/5, y*blocSize+blocSize);
                 }
             }
         }
@@ -87,7 +59,7 @@ public class UI extends JPanel implements ActionListener {
     public void afficheMapConsole() {
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                System.out.printf("%c",gameMap[y][x]);
+                System.out.printf("%c",gameMap[y][x].getObj());
             }
             System.out.println();
         }
@@ -111,15 +83,6 @@ public class UI extends JPanel implements ActionListener {
         }
     }
 
-    public void afficheMapConsoleO() {
-        for (int y = 0; y<sizeY; y++){
-            for (int x = 0; x<sizeX; x++){
-                System.out.println(gameMapO[y][x].getNumberEggs());
-            }
-            System.out.println();
-        }
-    }
-
     private void afficherImage(Image img, int x, int y, Graphics g) {
         g.drawImage(img, x, y, this);
         Toolkit.getDefaultToolkit().sync();
@@ -128,13 +91,13 @@ public class UI extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        afficheCarteO(g);
+        afficheCarte(g);
         //System.out.println("dans l'affichage");
     }
 
     public void actionPerformed(ActionEvent e) {
         for (Kid kid : listKid){
-            kid.move(gameMapO);
+            kid.move(gameMap);
         }
         //System.out.println("time B : " + System.currentTimeMillis());
         repaint();

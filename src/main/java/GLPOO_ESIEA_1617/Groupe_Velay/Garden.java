@@ -16,8 +16,7 @@ public class Garden extends JFrame{
     private int sizeY;
     private int blocSize;
     private int fps;
-    private char [][] gameMap;
-    private MapObjects [][] gameMapO;
+    private MapObjects [][] gameMap;
     private Scanner fic = null;
     private String filenameMap = "Ressources/map.txt";
     private String filenameKids = "Ressources/kids.txt";
@@ -32,31 +31,11 @@ public class Garden extends JFrame{
     protected void init(){
         listKid = new ArrayList<Kid>();
         loadMap();
-        //loadKids();
-        fps = 30;
-        gameMap = new char[sizeY][sizeX];
-        map = new UI(sizeY,sizeX,blocSize,gameMap);
-        initMap();
-        this.setTitle("Garden");
-        this.setSize(sizeX*blocSize+5, sizeY*blocSize+28);
-        this.setContentPane(map);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        Timer tRepaint = new Timer(1000/fps, (ActionListener) map);
-        tRepaint.start();
-    }
-
-    protected void initO(){
-        listKid = new ArrayList<Kid>();
-        loadMap();
 
         fps = 1;
-        gameMapO = new MapObjects[sizeY][sizeX];
+        gameMap = new MapObjects[sizeY][sizeX];
 
-        map = new UI(sizeY,sizeX,blocSize,gameMapO, listKid);
+        map = new UI(sizeY,sizeX,blocSize,gameMap,listKid);
         initMapO();
         this.setTitle("Garden");
         this.setSize(sizeX*blocSize+5, sizeY*blocSize+28);
@@ -88,7 +67,7 @@ public class Garden extends JFrame{
         while (fic.hasNextLine()){
             line = fic.nextLine();
             System.out.print(line);
-            addKidO(line);
+            addKid(line);
         }
         fic.close();
     }
@@ -106,51 +85,31 @@ public class Garden extends JFrame{
         return null;
     }
 
-    protected void initMap(){
-        for (int y = 0; y<sizeY; y++){
-            for (int x = 0; x<sizeX; x++){
-                gameMap[y][x] = '0'; // 0 pour 0 oeuf
-            }
-        }
-        initBorderMap();
-        loadEggsAndRock();
-    }
 
     protected void initMapO(){
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                gameMapO[y][x] = new MapObjects();
+                gameMap[y][x] = new MapObjects();
             }
         }
-        initBorderMapO();
-        loadEggsAndRockO();
+        initBorderMap();
+        loadEggsAndRock();
         loadKids();
         for (Kid kid : listKid)
             System.out.println(kid);
     }
-
     private void initBorderMap() {
         for (int x = 0; x<sizeX; x++){
-            gameMap[0][x] = 'b';
-            gameMap[sizeY-1][x] = 'b'; // b pour bord
+            gameMap[0][x].setBusy(true);
+            gameMap[0][x].setObj(Obj.ROCK);
+            gameMap[sizeY-1][x].setBusy(true);
+            gameMap[sizeY-1][x].setObj(Obj.ROCK);
         }
         for (int y = 0; y<sizeY; y++){
-            gameMap[y][0] = 'b';
-            gameMap[y][sizeX-1] = 'b';
-        }
-    }
-    private void initBorderMapO() {
-        for (int x = 0; x<sizeX; x++){
-            gameMapO[0][x].setBusy(true);
-            gameMapO[0][x].setObj(Obj.ROCK);
-            gameMapO[sizeY-1][x].setBusy(true);
-            gameMapO[sizeY-1][x].setObj(Obj.ROCK);
-        }
-        for (int y = 0; y<sizeY; y++){
-            gameMapO[y][0].setBusy(true);
-            gameMapO[y][0].setObj(Obj.ROCK);
-            gameMapO[y][sizeX-1].setBusy(true);
-            gameMapO[y][sizeX-1].setObj(Obj.ROCK);
+            gameMap[y][0].setBusy(true);
+            gameMap[y][0].setObj(Obj.ROCK);
+            gameMap[y][sizeX-1].setBusy(true);
+            gameMap[y][sizeX-1].setObj(Obj.ROCK);
         }
     }
 
@@ -170,7 +129,7 @@ public class Garden extends JFrame{
             System.out.print(line);
             switch (type){
                 case 'C':
-                    number =  line.charAt(6);
+                    number =  line.charAt(6)-'0';
                     addChocolate(posX,posY,(char)number);
                     break;
                 case 'R':
@@ -181,76 +140,36 @@ public class Garden extends JFrame{
         fic.close();
     }
 
-    private void loadEggsAndRockO(){
-        String line = "";
-        char type = ' ';
-        int posX = 0, posY = 0, number = 0;
-        fic = openFile(filenameMap);
-        while (fic.hasNextLine()){
-            line = fic.nextLine();
-            if (line.length()>0) {
-                type = line.charAt(0);
-                posX = line.charAt(2)-'0';
-                posY = line.charAt(4)-'0';
-            }
-            System.out.print(line);
-            switch (type){
-                case 'C':
-                    number =  line.charAt(6);
-                    addChocolateO(posX,posY,(char)number);
-                    break;
-                case 'R':
-                    addRockO(posX,posY);
-                    break;
-            }
-        }
-        fic.close();
-    }
-
     private void addChocolate (int posX, int posY, char number){
         if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
-            gameMap[posY][posX] = java.lang.Character.toChars(number)[0];
-        }
-    }
-
-    private void addRock (int posX, int posY){
-        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
-            gameMap[posY][posX] = 'r';
-        } else {
-            System.out.println("Chargement d'un rocher en dehors du terrain : MISSED");
-        }
-    }
-
-    private void addChocolateO (int posX, int posY, char number){
-        if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
             final int nbEgg = java.lang.Character.toChars(number)[0];
-            gameMapO[posY][posX].setNumberEggs(nbEgg);
-            gameMapO[posY][posX].setObj(Obj.EGG);
+            gameMap[posY][posX].setNumberEggs(nbEgg);
+            gameMap[posY][posX].setObj(Obj.EGG);
             for (int egg = 0; egg < nbEgg; egg++) {
-                gameMapO[posY][posX].getListEgg().add(new Egg());
+                gameMap[posY][posX].getListEgg().add(new Egg());
             }
         } else {
             System.out.println("Chargement d'un oeuf en dehors du terrain : WHAT A WASTE");
         }
     }
 
-    private void addRockO (int posX, int posY){
+    private void addRock (int posX, int posY){
         if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
-            gameMapO[posY][posX].setBusy(true);
-            gameMapO[posY][posX].setObj(Obj.ROCK);
+            gameMap[posY][posX].setBusy(true);
+            gameMap[posY][posX].setObj(Obj.ROCK);
         } else {
             System.out.println("Chargement d'un rocher en dehors du terrain : MISSED");
         }
     }
 
-    private void addKidO(String line){
+    private void addKid(String line){
 
         int posX = line.charAt(2)-'0';
         int posY = line.charAt(4)-'0';
         System.out.println("KOKO"+ posX + " " + posY);
 
         if (posX>0 && posX<sizeX && posY>0 && posY<sizeY) {
-            if (gameMapO[posY][posX].isBusy()) {
+            if (gameMap[posY][posX].isBusy()) {
                 System.out.println("Chargement d'un enfant sur un rocher : FIRST BLOOD");
             }
             else {
@@ -276,21 +195,13 @@ public class Garden extends JFrame{
                     if (line.length()==index) stop = true;
                 } while (!stop);
                 kid.setName(name.toString());
-                if (gameMapO[posY][posX].getObj().equals(Obj.EGG))  gameMapO[posY][posX].setObj(Obj.EGGANDKID);
-                else gameMapO[posY][posX].setObj(Obj.KID);
+                if (gameMap[posY][posX].getObj().equals(Obj.EGG))  gameMap[posY][posX].setObj(Obj.EGGANDKID);
+                else gameMap[posY][posX].setObj(Obj.KID);
                 listKid.add(kid);
             }
         } else {
             System.out.println("Chargement d'un enfant en dehors du terrain");
         }
-    }
-
-    private void addKid(String line){
-        Kid kid = new Kid();
-        final int posX = line.charAt(2)-'0';
-        final int posY = line.charAt(4)-'0';
-        kid.initPos(posX,posY,'E');
-        listKid.add(kid);
     }
 
 
@@ -326,14 +237,6 @@ public class Garden extends JFrame{
         this.fps = fps;
     }
 
-    public char[][] getGameMap() {
-        return gameMap;
-    }
-
-    public void setGameMap(char[][] gameMap) {
-        this.gameMap = gameMap;
-    }
-
     public Scanner getFic() {
         return fic;
     }
@@ -358,4 +261,27 @@ public class Garden extends JFrame{
         this.map = map;
     }
 
+    public MapObjects[][] getGameMap() {
+        return gameMap;
+    }
+
+    public void setGameMap(MapObjects[][] gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    public String getFilenameKids() {
+        return filenameKids;
+    }
+
+    public void setFilenameKids(String filenameKids) {
+        this.filenameKids = filenameKids;
+    }
+
+    public ArrayList<Kid> getListKid() {
+        return listKid;
+    }
+
+    public void setListKid(ArrayList<Kid> listKid) {
+        this.listKid = listKid;
+    }
 }

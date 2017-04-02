@@ -32,8 +32,22 @@ public class Kid extends Character {
         setDirection(direction);
     }
 
+    protected boolean pickUp(MapObjects [][] gameMap){
+        final int nbEgg = gameMap[posY][posX].getNumberEggs();
+        System.out.println(nbEgg);
+        if (nbEgg>0){
+            gameMap[posY][posX].setNumberEggs(nbEgg-1);
+            if (nbEgg-1==0) gameMap[posY][posX].setObj(Obj.KID);
+            return true;
+        }
+        return false;
+    }
+
     public void move(MapObjects [][] gameMap){
-        if (!path.isEmpty()) {
+        if (pickUp(gameMap)){
+            System.out.println("Oeuf Ramassé");
+        }
+        else if (!path.isEmpty()) {
             final char dir = path.get(0);
             path.remove(0);
             switch (dir) {
@@ -75,16 +89,16 @@ public class Kid extends Character {
                     System.out.println("Avance");
                     switch (direction) {
                         case 'N':
-                            moveTop();
+                            moveTop(gameMap);
                             break;
                         case 'E':
-                            moveRight();
+                            moveRight(gameMap);
                             break;
                         case 'W':
-                            moveLeft();
+                            moveLeft(gameMap);
                             break;
                         case 'S':
-                            moveDown();
+                            moveDown(gameMap);
                             break;
                     }
 

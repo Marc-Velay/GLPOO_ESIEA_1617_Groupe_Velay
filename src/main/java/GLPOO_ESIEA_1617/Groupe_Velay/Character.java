@@ -1,6 +1,6 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
-public abstract class Character implements Player, AI {
+public abstract class Character implements AI {
 	
 	protected int score = 0;
 	protected int posX = 0;
@@ -17,25 +17,38 @@ public abstract class Character implements Player, AI {
     protected String name = "";
     protected char direction = ' ';
 
-	
-	public void moveTop(){
-		posY -= 1;
-		
+    private void moveAction(MapObjects [][]gameMap, int valX, int valY){
+        if (gameMap[posY+valY][posX+valX].isBusy()){
+            System.out.println(valX + " " + valY + " BUSY");
+        } else{
+            gameMap[posY+valY][posX+valX].setBusy(true);
+            gameMap[posY][posX].setBusy(false);
+            gameMap[posY][posX].setObj(Obj.JARDIN);
+            if(gameMap[posY+valY][posX+valX].getObj().equals(Obj.EGG)){
+                gameMap[posY+valY][posX+valX].setObj(Obj.EGGANDKID);
+            } else {
+                gameMap[posY+valY][posX+valX].setObj(Obj.KID);
+            }
+            posY += valY;
+            posX += valX;
+        }
+
+    }
+
+	public void moveTop(MapObjects [][]gameMap){
+        moveAction(gameMap,0,-1);
 	}
 	
-	public void moveDown(){
-		posY += 1;
-		
+	public void moveDown(MapObjects [][]gameMap){
+        moveAction(gameMap,0,1);
 	}
 	
-	public void moveRight(){
-		posX += 1;
-		
+	public void moveRight(MapObjects [][]gameMap){
+        moveAction(gameMap,1,0);
 	}
 	
-	public void moveLeft(){
-		posX -= 1;
-		
+	public void moveLeft(MapObjects [][]gameMap){
+        moveAction(gameMap,-1,0);
 	}
 	
 	public void pickUp(int valEgg){
