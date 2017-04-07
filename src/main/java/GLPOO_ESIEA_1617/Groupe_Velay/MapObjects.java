@@ -25,6 +25,13 @@ public class MapObjects {
         busy = false;
     }
 
+    public MapObjects(ArrayList<Egg> listEgg, Obj obj, boolean busy, int numberEggs) {
+        this.listEgg = listEgg;
+        this.obj = obj;
+        this.busy = busy;
+        this.numberEggs = numberEggs;
+    }
+
     public ArrayList<Egg> getListEgg() {
         return listEgg;
     }

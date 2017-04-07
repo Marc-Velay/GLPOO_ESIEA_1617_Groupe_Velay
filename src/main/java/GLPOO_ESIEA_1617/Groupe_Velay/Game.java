@@ -6,6 +6,7 @@ public class Game {
 	public static void main(String[] args) {
 		Garden garden = new Garden();
 		garden.init();
+		garden.loadItems();
 	}
 
 

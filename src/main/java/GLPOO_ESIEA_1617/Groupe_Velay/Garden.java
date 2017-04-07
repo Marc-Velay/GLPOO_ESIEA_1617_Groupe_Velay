@@ -77,6 +77,9 @@ public class Garden extends JFrame{
             addKid(line);
         }
         fic.close();
+        for (Kid kid : listKid)
+            System.out.println(kid);
+        hud.init(listKid);
     }
 
     private Scanner openFile (String nomFichier){
@@ -100,12 +103,13 @@ public class Garden extends JFrame{
             }
         }
         initBorderMap();
+    }
+
+    public void loadItems() {
         loadEggsAndRock();
         loadKids();
-        for (Kid kid : listKid)
-            System.out.println(kid);
-        hud.init(listKid);
     }
+
     private void initBorderMap() {
         for (int x = 0; x<sizeX; x++){
             gameMap[0][x].setBusy(true);
@@ -206,6 +210,7 @@ public class Garden extends JFrame{
                 kid.setName(name.toString());
                 if (gameMap[posY][posX].getObj().equals(Obj.EGG))  gameMap[posY][posX].setObj(Obj.EGGANDKID);
                 else gameMap[posY][posX].setObj(Obj.KID);
+                gameMap[posY][posX].setBusy(true);
                 listKid.add(kid);
             }
         } else {
