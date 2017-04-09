@@ -13,7 +13,7 @@ public class HUD extends JPanel {
     }
 
     public void init(ArrayList<Kid> listKid){
-        this.setPreferredSize(new Dimension(700,100));
+        this.setPreferredSize(new Dimension(700,300));
         this.setLayout(new GridLayout(listKid.size(), 2));
         for (Kid kid : listKid){
             kid.getJname().setText(kid.getName());

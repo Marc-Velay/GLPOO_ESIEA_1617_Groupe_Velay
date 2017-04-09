@@ -32,7 +32,7 @@ public class GardenTest {
     }
     @Test
     public void testInitMap() {
-        garden.init();
+        garden.initUI();
         garden.gettRepaint().stop();
         final MapObjects[][] arrayExpected =
                 {
@@ -49,7 +49,7 @@ public class GardenTest {
 
     @Test
     public void testLoadItems() {
-        garden.init();
+        garden.initUI();
         garden.loadItems();
         garden.gettRepaint().stop();
         final MapObjects[][] arrayExpected =
@@ -66,7 +66,7 @@ public class GardenTest {
 
     @Test
     public void testAfterRun() {
-        garden.init();
+        garden.initUI();
         garden.loadItems();
         garden.gettRepaint().setDelay(1);
         final MapObjects[][] arrayExpected =
