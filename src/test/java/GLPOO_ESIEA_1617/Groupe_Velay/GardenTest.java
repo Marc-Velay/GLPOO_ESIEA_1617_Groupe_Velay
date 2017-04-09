@@ -46,19 +46,8 @@ public class GardenTest {
         compareArray(arrayExpected);
     }
 
-    private void compareArray(MapObjects[][] arrayExpected){
-        for (int row=0; row<6; row++)
-            for (int col=0; col<6; col++){
-                assertEquals(arrayExpected[row][col].getNumberEggs(),getNbOeuf(col,row));
-                assertEquals(arrayExpected[row][col].getListEgg().size(),getListEgg(col,row).size());
-                assertEquals(arrayExpected[row][col].getObj(),getObj(col,row));
-                assertEquals(arrayExpected[row][col].isBusy(),getBusy(col,row));
-            }
-    }
-
-
     @Test
-    public void testloadItem() {
+    public void testAfterRun() {
         garden.init();
         garden.loadItems();
         final MapObjects[][] arrayExpected =
@@ -72,6 +61,19 @@ public class GardenTest {
                 };
         compareArray(arrayExpected);
     }
+
+    private void compareArray(MapObjects[][] arrayExpected){
+        for (int row=0; row<6; row++)
+            for (int col=0; col<6; col++){
+                assertEquals(arrayExpected[row][col].getNumberEggs(),getNbOeuf(col,row));
+                assertEquals(arrayExpected[row][col].getListEgg().size(),getListEgg(col,row).size());
+                assertEquals(arrayExpected[row][col].getObj(),getObj(col,row));
+                assertEquals(arrayExpected[row][col].isBusy(),getBusy(col,row));
+            }
+    }
+
+
+
 
 
     private boolean getBusy(int col, int row){
