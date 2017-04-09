@@ -27,6 +27,16 @@ public class Garden extends JFrame{
     private ArrayList<Kid> listKidDone;
     private int maxEgg;
 
+    public Timer gettRepaint() {
+        return tRepaint;
+    }
+
+    public void settRepaint(Timer tRepaint) {
+        this.tRepaint = tRepaint;
+    }
+
+    private Timer tRepaint;
+
 
     public Garden () {
 
@@ -52,7 +62,7 @@ public class Garden extends JFrame{
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        Timer tRepaint = new Timer(1000/fps, (ActionListener) map);
+        tRepaint = new Timer(1000/fps, (ActionListener) map);
         tRepaint.start();
     }
 
