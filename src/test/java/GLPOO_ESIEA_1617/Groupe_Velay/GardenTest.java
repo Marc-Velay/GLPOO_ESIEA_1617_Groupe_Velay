@@ -33,6 +33,7 @@ public class GardenTest {
     @Test
     public void testInitMap() {
         garden.init();
+        garden.gettRepaint().stop();
         final MapObjects[][] arrayExpected =
                 {
                         {newBlock(), newBlock(), newBlock(), newBlock(), newBlock(), newBlock()},
@@ -47,9 +48,10 @@ public class GardenTest {
     }
 
     @Test
-    public void testAfterRun() {
+    public void testLoadItems() {
         garden.init();
         garden.loadItems();
+        garden.gettRepaint().stop();
         final MapObjects[][] arrayExpected =
                 {
                         {newBlock(), newBlock(), newBlock(), newBlock(), newBlock(), newBlock()},
@@ -59,6 +61,28 @@ public class GardenTest {
                         {newBlock(), newJardin(), newJardin(), newJardin(), newJardin(), newBlock()},
                         {newBlock(), newBlock(), newBlock(), newBlock(), newBlock(), newBlock()}
                 };
+        compareArray(arrayExpected);
+    }
+
+    @Test
+    public void testAfterRun() {
+        garden.init();
+        garden.loadItems();
+        garden.gettRepaint().setDelay(1);
+        final MapObjects[][] arrayExpected =
+                {
+                        {newBlock(), newBlock(), newBlock(), newBlock(), newBlock(), newBlock()},
+                        {newBlock(), newJardin(), newJardin(), newJardin(), newJardin(), newBlock()},
+                        {newBlock(), newJardin(), newBlock(), newJardin(), newJardin(), newBlock()},
+                        {newBlock(), newJardin(), newJardin(), newKid(), newJardin(), newBlock()},
+                        {newBlock(), newJardin(), newKid(), newJardin(), newJardin(), newBlock()},
+                        {newBlock(), newBlock(), newBlock(), newBlock(), newBlock(), newBlock()}
+                };
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         compareArray(arrayExpected);
     }
 
