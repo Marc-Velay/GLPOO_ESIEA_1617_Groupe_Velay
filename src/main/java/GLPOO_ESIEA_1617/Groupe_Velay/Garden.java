@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -71,13 +72,14 @@ public class Garden extends JFrame{
     protected void initEditeur(){
         listKid = new ArrayList<Kid>();
         loadMap();
-        fps = 30;
+        fps = 25;
         maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
 
         mapEdit = new Editeur(sizeY,sizeX,blocSize,gameMap);
         initMap();
         this.addMouseListener((MouseListener) mapEdit);
+        this.addMouseMotionListener((MouseMotionListener) mapEdit);
         this.setTitle("Editeur");
         this.setSize(sizeX*blocSize, sizeY*blocSize+100);
         this.setContentPane(mapEdit);
@@ -86,7 +88,7 @@ public class Garden extends JFrame{
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        tRepaint = new Timer(1000/fps, (ActionListener) map);
+        tRepaint = new Timer(1000/fps, (ActionListener) mapEdit);
         tRepaint.start();
     }
 

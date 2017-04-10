@@ -2,17 +2,14 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Created by kafim on 09/04/2017.
  */
-public class Editeur extends JPanel implements ActionListener,MouseListener {
+public class Editeur extends JPanel implements ActionListener,MouseListener, MouseMotionListener {
     private JButton bSave;
     private Garden garden;
     private Image rock;
@@ -26,6 +23,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener {
     private int sizeX;
     private int sizeY;
     private int blocSize;
+    private int xActuel;
+    private int yActuel;
     private MapObjects [][] gameMap;
     private boolean BLOCKED = false;
 
@@ -97,7 +96,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         afficheCarte(g);
-        afficheMapConsole();
+        //afficheMapConsole();
+        afficherImage(rock,xActuel,yActuel,g);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -121,11 +121,6 @@ public class Editeur extends JPanel implements ActionListener,MouseListener {
         kidS = chargerImage("S1");
         kidN = chargerImage("N1");
     }
-
-
-
-
-
 
     public void mouseClicked(MouseEvent e) {
 
@@ -156,5 +151,14 @@ public class Editeur extends JPanel implements ActionListener,MouseListener {
 
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        xActuel = e.getX()-blocSize/2;
+        yActuel = e.getY()-4*blocSize/3;
     }
 }
