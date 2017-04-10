@@ -17,6 +17,7 @@ import java.util.Scanner;
 public class Garden extends JFrame{
     private int sizeX;
     private int sizeY;
+    private int sizeHUD;
     private int blocSize;
     private int fps;
     private MapObjects [][] gameMap;
@@ -42,7 +43,7 @@ public class Garden extends JFrame{
 
 
     public Garden () {
-
+        sizeHUD = 150;
     }
 
     protected void initUI(){
@@ -54,10 +55,10 @@ public class Garden extends JFrame{
         gameMap = new MapObjects[sizeY][sizeX];
 
         map = new UI(sizeY,sizeX,blocSize,gameMap,listKid);
-        hud = new HUD();
+        hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
         initMap();
         this.setTitle("Garden");
-        this.setSize(sizeX*blocSize, sizeY*blocSize+100);
+        this.setSize(sizeX*blocSize, sizeY*blocSize+40+sizeHUD);
         this.add(map, BorderLayout.CENTER);
         this.add(hud, BorderLayout.SOUTH);
         this.setResizable(false);
@@ -76,13 +77,17 @@ public class Garden extends JFrame{
         maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
 
-        mapEdit = new Editeur(sizeY,sizeX,blocSize,gameMap);
+        mapEdit = new Editeur(sizeY,sizeX,blocSize,gameMap, listKid);
         initMap();
+        hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
+        hud.initEditeur();
+        hud.repaint();
         this.addMouseListener((MouseListener) mapEdit);
         this.addMouseMotionListener((MouseMotionListener) mapEdit);
         this.setTitle("Editeur");
-        this.setSize(sizeX*blocSize, sizeY*blocSize+100);
-        this.setContentPane(mapEdit);
+        this.setSize(sizeX*blocSize, sizeY*blocSize+40+sizeHUD);
+        this.add(mapEdit, BorderLayout.CENTER);
+        this.add(hud, BorderLayout.SOUTH);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);

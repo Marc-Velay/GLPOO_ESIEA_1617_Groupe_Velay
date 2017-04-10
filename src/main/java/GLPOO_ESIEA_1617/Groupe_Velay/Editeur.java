@@ -12,6 +12,7 @@ import java.util.Map;
 public class Editeur extends JPanel implements ActionListener,MouseListener, MouseMotionListener {
     private JButton bSave;
     private Garden garden;
+    private Image objActuel;
     private Image rock;
     private Image terre;
     private Image oeuf;
@@ -25,18 +26,21 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     private int blocSize;
     private int xActuel;
     private int yActuel;
+    private ArrayList<Kid> listKid;
     private MapObjects [][] gameMap;
     private boolean BLOCKED = false;
 
-    public Editeur(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMap){
+    public Editeur(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMap, ArrayList<Kid> listKid){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.blocSize = blocSize;
         this.gameMap = gameMap;
+        this.listKid = listKid;
         loadImages();
         bSave = new JButton("Sauver");
         bSave.addActionListener(this);
         add(bSave);
+        objActuel = terre;
     }
 
     public void afficheCarte(Graphics g){
@@ -68,7 +72,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             System.out.println();
         }
     }
-/*    private void drawKids(Graphics g){
+    private void drawKids(Graphics g){
         for (Kid kid : listKid){
             switch (kid.getDirection()){
                 case 'E':
@@ -85,7 +89,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                     break;
             }
         }
-    }*/
+    }
 
     private void afficherImage(Image img, int x, int y, Graphics g) {
         g.drawImage(img, x, y, this);
@@ -97,7 +101,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         super.paintComponent(g);
         afficheCarte(g);
         //afficheMapConsole();
-        afficherImage(rock,xActuel,yActuel,g);
+        afficherImage(objActuel,xActuel,yActuel,g);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -116,10 +120,10 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         rock  = chargerImage("mur");
         oeuf  = chargerImage("oeuf");
         terre = chargerImage("terre");
-        kidE = chargerImage("E1");
-        kidW = chargerImage("O1");
-        kidS = chargerImage("S1");
-        kidN = chargerImage("N1");
+        kidE  = chargerImage("E1");
+        kidW  = chargerImage("O1");
+        kidS  = chargerImage("S1");
+        kidN  = chargerImage("N1");
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -129,12 +133,36 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     public void mousePressed(MouseEvent e) {
         if (!BLOCKED){
             BLOCKED = true;
-            if (e.getX() > blocSize && e.getX() <blocSize*(sizeX+2) && e.getY() > blocSize && e.getY() <blocSize*(2+sizeY)){
+            System.out.println("souris clique : " + e.getX() + " " + e.getY());
+            // si on clique dans le terrain
+            if (e.getX() > blocSize && e.getX() <blocSize*(sizeX+2) && e.getY() > blocSize && e.getY() <blocSize*(sizeY)){
                 System.out.println("souris clique : " + e.getX() + " " + e.getY());
                 if (gameMap[e.getY()/blocSize-1][e.getX()/blocSize].getObj().equals(Obj.JARDIN))
                     gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.ROCK);
                 else
                     gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.JARDIN);
+            }
+            // si on clique dans le HUD pour choisir un objet à rajouter
+            if (e.getX() > blocSize/2 && e.getX() < 15*blocSize/2 && e.getY() > 2*blocSize+sizeY*blocSize && e.getY() < 3*blocSize+sizeY*blocSize){
+                System.out.println("CLIQUE DANS LE HUD" +sizeY);
+                if (e.getX()>blocSize/2 && e.getX()<3*blocSize/2){
+                    addSelected(1);
+                    objActuel = terre;
+                } else if (e.getX()>3*blocSize/2 && e.getX()<5*blocSize/2){
+                    addSelected(3);
+                    objActuel = rock;
+                } else if (e.getX()>5*blocSize/2 && e.getX()<7*blocSize/2){
+                    objActuel = oeuf;
+                } else if (e.getX()>7*blocSize/2 && e.getX()<9*blocSize/2){
+                    objActuel = kidE;
+                } else if (e.getX()>9*blocSize/2 && e.getX()<11*blocSize/2){
+                    objActuel = kidN;
+                } else if (e.getX()>11*blocSize/2 && e.getX()<13*blocSize/2){
+                    objActuel = kidW;
+                } else if (e.getX()>13*blocSize/2 && e.getX()<15*blocSize/2){
+                    objActuel = kidS;
+                }
+
             }
             repaint();
             BLOCKED = false;
@@ -160,5 +188,9 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     public void mouseMoved(MouseEvent e) {
         xActuel = e.getX()-blocSize/2;
         yActuel = e.getY()-4*blocSize/3;
+    }
+
+    private void addSelected (int posX){
+        // ici on mettra en valeur quelle obj est selectionné.
     }
 }
