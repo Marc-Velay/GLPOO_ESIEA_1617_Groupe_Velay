@@ -144,18 +144,27 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                 switch (objActuel){
                     case ROCK:
                         gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.ROCK);
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setNumberEggs(0);
                         break;
                     case EGG:
                         gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.EGG);
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setNumberEggs(gameMap[e.getY()/blocSize-1][e.getX()/blocSize].getNumberEggs()+1);
                         break;
                     case KID:
+                        char oldDirection = kidActual.getDirection();
                         gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.KID);
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setNumberEggs(0);
                         kidActual.setPosX(e.getX()/blocSize);
                         kidActual.setPosY(e.getY()/blocSize-1);
                         listKid.add(kidActual);
+                        deleteKid(e.getY()/blocSize-1,e.getX()/blocSize);
+                        System.out.println(listKid);
+                        kidActual = new Kid(0);
+                        kidActual.setDirection(oldDirection);
                         break;
                     case JARDIN:
                         gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.JARDIN);
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setNumberEggs(0);
                         break;
                 }
                 /*if (gameMap[e.getY()/blocSize-1][e.getX()/blocSize].getObj().equals(Obj.JARDIN))
@@ -203,6 +212,15 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             }
             repaint();
             BLOCKED = false;
+        }
+    }
+
+    private void deleteKid(int y, int x) {
+        for (Kid kid : listKid){
+            if (kid.getPosX() == x && kid.getPosY()== y && kid != kidActual){
+                listKid.remove(kid);
+                break;
+            }
         }
     }
 
