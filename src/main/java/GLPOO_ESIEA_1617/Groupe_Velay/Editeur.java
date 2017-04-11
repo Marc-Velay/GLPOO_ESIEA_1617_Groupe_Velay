@@ -12,7 +12,8 @@ import java.util.Map;
 public class Editeur extends JPanel implements ActionListener,MouseListener, MouseMotionListener {
     private JButton bSave;
     private Garden garden;
-    private Image objActuel;
+    private Image objImgActuel;
+    private Obj objActuel;
     private Image rock;
     private Image terre;
     private Image oeuf;
@@ -26,6 +27,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     private int blocSize;
     private int xActuel;
     private int yActuel;
+    private Kid kidActual;
     private ArrayList<Kid> listKid;
     private MapObjects [][] gameMap;
     private boolean BLOCKED = false;
@@ -40,7 +42,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         bSave = new JButton("Sauver");
         bSave.addActionListener(this);
         add(bSave);
-        objActuel = terre;
+        objImgActuel = terre;
     }
 
     public void afficheCarte(Graphics g){
@@ -101,7 +103,9 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         super.paintComponent(g);
         afficheCarte(g);
         //afficheMapConsole();
-        afficherImage(objActuel,xActuel,yActuel,g);
+        drawKids(g);
+        afficherImage(objImgActuel,xActuel,yActuel,g); // on affiche l'élément actuel
+
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -137,30 +141,63 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             // si on clique dans le terrain
             if (e.getX() > blocSize && e.getX() <blocSize*(sizeX+2) && e.getY() > blocSize && e.getY() <blocSize*(sizeY)){
                 System.out.println("souris clique : " + e.getX() + " " + e.getY());
-                if (gameMap[e.getY()/blocSize-1][e.getX()/blocSize].getObj().equals(Obj.JARDIN))
+                switch (objActuel){
+                    case ROCK:
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.ROCK);
+                        break;
+                    case EGG:
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.EGG);
+                        break;
+                    case KID:
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.KID);
+                        kidActual.setPosX(e.getX()/blocSize);
+                        kidActual.setPosY(e.getY()/blocSize-1);
+                        listKid.add(kidActual);
+                        break;
+                    case JARDIN:
+                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.JARDIN);
+                        break;
+                }
+                /*if (gameMap[e.getY()/blocSize-1][e.getX()/blocSize].getObj().equals(Obj.JARDIN))
                     gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.ROCK);
                 else
                     gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.JARDIN);
+                    */
             }
             // si on clique dans le HUD pour choisir un objet à rajouter
             if (e.getX() > blocSize/2 && e.getX() < 15*blocSize/2 && e.getY() > 2*blocSize+sizeY*blocSize && e.getY() < 3*blocSize+sizeY*blocSize){
                 System.out.println("CLIQUE DANS LE HUD" +sizeY);
                 if (e.getX()>blocSize/2 && e.getX()<3*blocSize/2){
                     addSelected(1);
-                    objActuel = terre;
+                    objImgActuel = terre;
+                    objActuel = Obj.JARDIN;
                 } else if (e.getX()>3*blocSize/2 && e.getX()<5*blocSize/2){
                     addSelected(3);
-                    objActuel = rock;
+                    objImgActuel = rock;
+                    objActuel = Obj.ROCK;
                 } else if (e.getX()>5*blocSize/2 && e.getX()<7*blocSize/2){
-                    objActuel = oeuf;
+                    objImgActuel = oeuf;
+                    objActuel = Obj.EGG;
                 } else if (e.getX()>7*blocSize/2 && e.getX()<9*blocSize/2){
-                    objActuel = kidE;
+                    objImgActuel = kidE;
+                    objActuel = Obj.KID;
+                    kidActual = new Kid(0);
+                    kidActual.setDirection('E');
                 } else if (e.getX()>9*blocSize/2 && e.getX()<11*blocSize/2){
-                    objActuel = kidN;
+                    objImgActuel = kidN;
+                    objActuel = Obj.KID;
+                    kidActual = new Kid(0);
+                    kidActual.setDirection('N');
                 } else if (e.getX()>11*blocSize/2 && e.getX()<13*blocSize/2){
-                    objActuel = kidW;
+                    objImgActuel = kidW;
+                    objActuel = Obj.KID;
+                    kidActual = new Kid(0);
+                    kidActual.setDirection('W');
                 } else if (e.getX()>13*blocSize/2 && e.getX()<15*blocSize/2){
-                    objActuel = kidS;
+                    objImgActuel = kidS;
+                    objActuel = Obj.KID;
+                    kidActual = new Kid(0);
+                    kidActual.setDirection('S');
                 }
 
             }
