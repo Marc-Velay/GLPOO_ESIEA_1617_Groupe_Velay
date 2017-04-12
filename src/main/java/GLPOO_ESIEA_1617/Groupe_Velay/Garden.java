@@ -77,11 +77,11 @@ public class Garden extends JFrame{
         maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
 
-        mapEdit = new Editeur(sizeY,sizeX,blocSize,gameMap, listKid);
         initMap();
         hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
         hud.initEditeur();
         hud.repaint();
+        mapEdit = new Editeur(sizeY,sizeX,blocSize,gameMap, listKid, hud);
         this.addMouseListener((MouseListener) mapEdit);
         this.addMouseMotionListener((MouseMotionListener) mapEdit);
         this.setTitle("Editeur");

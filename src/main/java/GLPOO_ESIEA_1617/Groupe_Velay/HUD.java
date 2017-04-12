@@ -19,6 +19,16 @@ public class HUD extends JPanel {
     private Image kidS;
     private Image kidN;
     private int blocSize;
+
+    public int getEtape() {
+        return etape;
+    }
+
+    public void setEtape(int etape) {
+        this.etape = etape;
+    }
+
+    private int etape;
     private Font font = new Font("Courier", Font.BOLD, 20);
     public HUD(){
 
@@ -58,15 +68,24 @@ public class HUD extends JPanel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        afficherImage(terre,blocSize/2,sizeY+blocSize,g);
-        afficherImage(rock,3*blocSize/2,sizeY+blocSize,g);
-        afficherImage(oeuf,5*blocSize/2,sizeY+blocSize,g);
-        afficherImage(kidE,7*blocSize/2,sizeY+blocSize,g);
-        afficherImage(kidN,9*blocSize/2,sizeY+blocSize,g);
-        afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g);
-        afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g);
+        afficheEditeur(g);
 
         repaint();
+    }
+
+    public void afficheEditeur(Graphics g){
+        if (etape == 1) {
+            afficherImage(terre,blocSize/2,sizeY+blocSize,g);
+            afficherImage(rock,3*blocSize/2,sizeY+blocSize,g);
+            afficherImage(oeuf,5*blocSize/2,sizeY+blocSize,g);
+            afficherImage(kidE,7*blocSize/2,sizeY+blocSize,g);
+            afficherImage(kidN,9*blocSize/2,sizeY+blocSize,g);
+            afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g);
+            afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g);
+        } else if (etape == 2){
+
+        }
+
     }
 
     private void loadImages(){
