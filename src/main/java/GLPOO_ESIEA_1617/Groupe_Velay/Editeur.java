@@ -18,6 +18,10 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     private Image objImgActuel;
     private Obj objActuel;
     private Image rock;
+    private Image arrowLeft;
+    private Image arrowRight;
+    private Image arrowDown;
+    private Image arrowUp;
     private Image terre;
     private Image oeuf;
     private Image kidE;
@@ -30,6 +34,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     private int blocSize;
     private int xActuel;
     private int yActuel;
+    private int xPathActuel;
+    private int yPathActuel;
     private Kid kidActual;
     private int kidNumber;
     private ArrayList<Kid> listKid;
@@ -61,7 +67,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         bPrev.setVisible(false);
         bNext.setVisible(false);
         bSave.setVisible(false);
-        objImgActuel = terre;
+        objImgActuel = rock;
+        objActuel = Obj.ROCK;
         etape = 1;
         hud.setEtape(1);
     }
@@ -90,7 +97,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     public void afficheMapConsole() {
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                System.out.printf("%4s",gameMap[y][x].getObj().toString());
+                System.out.printf("%4s",gameMap[y][x].isBusy());
             }
             System.out.println();
         }
@@ -140,18 +147,39 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         afficheCarte(g);
+        //System.out.println("AFFICHAGE MAP");
         //afficheMapConsole();
         if (etape == 1){
             afficherImage(objImgActuel, xActuel, yActuel, g); // on affiche l'élément actuel
             drawKids(g);
         }
-        if (etape==2) {
+        if (etape == 2) {
             afficherChemin(g);
         }
     }
 
     private void afficherChemin(Graphics g) {
         drawKid(g,kidActual);
+        drawPathKid(g, kidActual);
+        repaint();
+    }
+
+    private void drawPathKid(Graphics g, Kid kid) {
+        //System.out.println(yPathActuel+" "+ xPathActuel);
+        if (!BLOCKED){
+            if (xPathActuel<sizeX-1 && !gameMap[yPathActuel][xPathActuel + 1].isBusy()){
+                afficherImage(arrowRight,(xPathActuel+1)*blocSize, yPathActuel*blocSize,g);
+            }
+            if (xPathActuel>0 && !gameMap[yPathActuel][xPathActuel-1].isBusy()){
+                afficherImage(arrowLeft,(xPathActuel-1)*blocSize, yPathActuel*blocSize,g);
+            }
+            if (yPathActuel<sizeY-1 && !gameMap[yPathActuel+1][xPathActuel].isBusy()){
+                afficherImage(arrowDown,xPathActuel*blocSize, (yPathActuel+1)*blocSize,g);
+            }
+            if (yPathActuel>0 && !gameMap[yPathActuel-1][xPathActuel].isBusy()){
+                afficherImage(arrowUp,xPathActuel*blocSize, (yPathActuel-1)*blocSize,g);
+            }
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -163,16 +191,40 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             bPrev.setVisible(true);
             bNext.setVisible(true);
             hud.setEtape(2);
-            if (listKid.get(0) != null){
+            hud.setKidMax(listKid.size());
+            if (listKid.size() > 0 && listKid.get(0) != null){
                 kidActual = listKid.get(0);
                 kidNumber = 0;
+                xPathActuel = kidActual.getPosX();
+                yPathActuel = kidActual.getPosY();
+
             }
             BLOCKED = false;
         }
         if (e.getSource() == bNext){
             BLOCKED = true;
             kidNumber++;
-            kidActual = listKid.get(kidNumber);
+            if (listKid.size() > kidNumber && kidNumber >=0 && listKid.get(kidNumber) != null) {
+                hud.setKidActual(kidNumber);
+                kidActual = listKid.get(kidNumber);
+                xPathActuel = kidActual.getPosX();
+                yPathActuel = kidActual.getPosY();
+                System.out.println(kidActual);
+            }
+            else kidNumber--;
+            BLOCKED = false;
+        }
+        if (e.getSource() == bPrev){
+            BLOCKED = true;
+            kidNumber--;
+            if (listKid.size() > kidNumber && kidNumber >= 0 && listKid.get(kidNumber) != null) {
+                hud.setKidActual(kidNumber);
+                kidActual = listKid.get(kidNumber);
+                xPathActuel = kidActual.getPosX();
+                yPathActuel = kidActual.getPosY();
+                System.out.println(kidActual);
+            }
+            else kidNumber++;
             BLOCKED = false;
         }
     }
@@ -193,6 +245,10 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         kidW  = chargerImage("O1");
         kidS  = chargerImage("S1");
         kidN  = chargerImage("N1");
+        arrowLeft = chargerImage("arrowLeft");
+        arrowRight = chargerImage("arrowRight");
+        arrowUp = chargerImage("arrowUp");
+        arrowDown = chargerImage("arrowDown");
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -205,12 +261,13 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             if (etape==1) {
                 System.out.println("souris clique : " + e.getX() + " " + e.getY());
                 // si on clique dans le terrain
-                if (e.getX() > blocSize && e.getX() < blocSize * (sizeX + 2) && e.getY() > blocSize && e.getY() < blocSize * (sizeY)) {
+                if (e.getX() > blocSize && e.getX() < blocSize * (sizeX + 2) && e.getY() > blocSize+25 && e.getY() < blocSize * (sizeY)) {
                     System.out.println("souris clique : " + e.getX() + " " + e.getY());
                     switch (objActuel) {
                         case ROCK:
                             gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setObj(Obj.ROCK);
                             gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setNumberEggs(0);
+                            gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setBusy(true);
                             break;
                         case EGG:
                             gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setObj(Obj.EGG);
@@ -278,7 +335,98 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                 }
             }
             else if (etape==2){
+                // au dessus
+                if (e.getX() > xPathActuel*blocSize && e.getX() < (xPathActuel+1)*blocSize
+                        && e.getY()+12 > yPathActuel*blocSize && e.getY()+12 < (yPathActuel+1)*blocSize){
+                    if (!gameMap[yPathActuel-1][xPathActuel].getObj().equals(Obj.ROCK)){
+                        switch (kidActual.getDirection()){
+                            case 'N':
+                                yPathActuel--;
+                                kidActual.setPosY(yPathActuel);
+                                System.out.println("au dessus");
+                                break;
+                            case 'W':
+                            case 'E':
+                                System.out.println("au dessus");
+                                kidActual.setDirection('N');
+                                break;
+                            case 'S':
+                                System.out.println("au dessus");
+                                kidActual.setDirection('W');
+                                break;
+                        }
 
+                    }
+                }
+                // en dessous
+                if (e.getX() > xPathActuel*blocSize && e.getX() < (xPathActuel+1)*blocSize
+                        && e.getY()+12 > (yPathActuel+2)*blocSize && e.getY()+12 < (yPathActuel+3)*blocSize){
+                    if (!gameMap[yPathActuel+1][xPathActuel].getObj().equals(Obj.ROCK)) {
+                        switch (kidActual.getDirection()){
+                            case 'S':
+                                yPathActuel++;
+                                System.out.println("en dessous");
+                                kidActual.setPosY(yPathActuel);
+                                break;
+                            case 'W':
+                            case 'E':
+                                System.out.println("en dessous");
+                                kidActual.setDirection('S');
+                                break;
+                            case 'N':
+                                System.out.println("en dessous");
+                                kidActual.setDirection('E');
+                                break;
+                        }
+
+                    }
+                }
+                // a droite
+                if (e.getX() > (xPathActuel+1)*blocSize && e.getX() < (xPathActuel+2)*blocSize
+                        && e.getY()+12 >(yPathActuel+1)*blocSize && e.getY()+12 < (yPathActuel+2)*blocSize){
+                    if (!gameMap[yPathActuel][xPathActuel+1].getObj().equals(Obj.ROCK)) {
+                        switch (kidActual.getDirection()){
+                            case 'E':
+                                xPathActuel++;
+                                System.out.println("a droite");
+                                kidActual.setPosX(xPathActuel);
+                                break;
+                            case 'N':
+                            case 'S':
+                                System.out.println("a droite");
+                                kidActual.setDirection('E');
+                                break;
+                            case 'W':
+                                System.out.println("a droite");
+                                kidActual.setDirection('N');
+                                break;
+                        }
+
+
+                    }
+                }
+                // a gauche
+                if (e.getX() > (xPathActuel-1)*blocSize && e.getX() < xPathActuel*blocSize
+                        && e.getY()+12 > (yPathActuel+1)*blocSize && e.getY()+12 < (yPathActuel+2)*blocSize){
+                    if (!gameMap[yPathActuel][xPathActuel-1].getObj().equals(Obj.ROCK)) {
+                        switch (kidActual.getDirection()){
+                            case 'W':
+                                xPathActuel--;
+                                System.out.println("a gauche");
+                                kidActual.setPosX(xPathActuel);
+                                break;
+                            case 'N':
+                            case 'S':
+                                System.out.println("a gauche");
+                                kidActual.setDirection('W');
+                                break;
+                            case 'E':
+                                System.out.println("a gauche");
+                                kidActual.setDirection('S');
+                                break;
+                        }
+                    }
+                }
             }
             repaint();
             BLOCKED = false;

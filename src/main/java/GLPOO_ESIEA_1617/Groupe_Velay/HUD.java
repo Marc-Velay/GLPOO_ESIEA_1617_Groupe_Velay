@@ -18,6 +18,8 @@ public class HUD extends JPanel {
     private Image kidW;
     private Image kidS;
     private Image kidN;
+    private int kidActual;
+    private int kidMax;
     private int blocSize;
 
     public int getEtape() {
@@ -55,7 +57,7 @@ public class HUD extends JPanel {
 
     public void initEditeur(){
         this.setPreferredSize(new Dimension(sizeX,sizeHUD));
-        this.setLayout(new GridLayout(4, 2));
+        this.setLayout(new GridLayout(sizeY-2, 2));
         this.setVisible(true);
         repaint();
     }
@@ -83,7 +85,10 @@ public class HUD extends JPanel {
             afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g);
             afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g);
         } else if (etape == 2){
-
+            g.setFont(font);
+            g.setColor(Color.black);
+            String str = "Enfant : " + (kidActual+1) + " / " + kidMax;
+            g.drawString(str, sizeY+blocSize, blocSize);
         }
 
     }
@@ -104,5 +109,13 @@ public class HUD extends JPanel {
         ImageIcon imageIcon = new ImageIcon("Ressources/Images/"+nomImg+".png");
         img = imageIcon.getImage().getScaledInstance(blocSize, blocSize, Image.SCALE_DEFAULT);
         return img;
+    }
+
+    public void setKidActual(int kidActual) {
+        this.kidActual = kidActual;
+    }
+
+    public void setKidMax(int kidMax) {
+        this.kidMax = kidMax;
     }
 }
