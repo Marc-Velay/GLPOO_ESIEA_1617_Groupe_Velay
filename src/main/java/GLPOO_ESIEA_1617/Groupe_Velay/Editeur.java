@@ -3,8 +3,10 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by kafim on 09/04/2017.
@@ -122,19 +124,21 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     }
 
     private void drawKid(Graphics g, Kid kid){
-        switch (kid.getDirection()){
-            case 'E':
-                afficherImage(kidE,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
-                break;
-            case 'N':
-                afficherImage(kidN,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
-                break;
-            case 'W':
-                afficherImage(kidW,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
-                break;
-            case 'S':
-                afficherImage(kidS,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
-                break;
+        if (kid != null) {
+            switch (kid.getDirection()) {
+                case 'E':
+                    afficherImage(kidE, kid.getPosX() * blocSize, kid.getPosY() * blocSize, g);
+                    break;
+                case 'N':
+                    afficherImage(kidN, kid.getPosX() * blocSize, kid.getPosY() * blocSize, g);
+                    break;
+                case 'W':
+                    afficherImage(kidW, kid.getPosX() * blocSize, kid.getPosY() * blocSize, g);
+                    break;
+                case 'S':
+                    afficherImage(kidS, kid.getPosX() * blocSize, kid.getPosY() * blocSize, g);
+                    break;
+            }
         }
     }
 
@@ -192,26 +196,38 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             bNext.setVisible(true);
             hud.setEtape(2);
             hud.setKidMax(listKid.size());
-            if (listKid.size() > 0 && listKid.get(0) != null){
+            if (listKid.size()==kidNumber){
+                this.remove(bPrev);
+                this.remove(bNext);
+                bSave.setVisible(true);
+            }
+            else if (listKid.size() > 0 && listKid.get(0) != null){
                 kidActual = listKid.get(0);
                 kidNumber = 0;
                 xPathActuel = kidActual.getPosX();
                 yPathActuel = kidActual.getPosY();
-
             }
+            hud.repaint();
             BLOCKED = false;
         }
         if (e.getSource() == bNext){
             BLOCKED = true;
             kidNumber++;
-            if (listKid.size() > kidNumber && kidNumber >=0 && listKid.get(kidNumber) != null) {
+            if (listKid.size()==kidNumber){
+                this.remove(bPrev);
+                this.remove(bNext);
+                bSave.setVisible(true);
+            }
+            else if (listKid.size() > kidNumber && kidNumber >=0 && listKid.get(kidNumber) != null) {
                 hud.setKidActual(kidNumber);
+                hud.printPath(null);
                 kidActual = listKid.get(kidNumber);
                 xPathActuel = kidActual.getPosX();
                 yPathActuel = kidActual.getPosY();
                 System.out.println(kidActual);
             }
             else kidNumber--;
+            hud.repaint();
             BLOCKED = false;
         }
         if (e.getSource() == bPrev){
@@ -219,14 +235,58 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
             kidNumber--;
             if (listKid.size() > kidNumber && kidNumber >= 0 && listKid.get(kidNumber) != null) {
                 hud.setKidActual(kidNumber);
+                hud.printPath(null);
                 kidActual = listKid.get(kidNumber);
                 xPathActuel = kidActual.getPosX();
                 yPathActuel = kidActual.getPosY();
                 System.out.println(kidActual);
             }
             else kidNumber++;
+            hud.repaint();
             BLOCKED = false;
         }
+        else if (e.getSource() == bSave){
+            saveMapAndKidMoves();
+        }
+    }
+
+    private void saveMapAndKidMoves() {
+        JOptionPane jop = new JOptionPane(), jop2 = new JOptionPane();
+        String nom = jop.showInputDialog(null, "Rentrez le nom de la carte", "Request", JOptionPane.QUESTION_MESSAGE);
+        jop2.showMessageDialog(null, "Carte enregistrée " + nom, "Message", JOptionPane.INFORMATION_MESSAGE);
+        File fmap = new File ("Ressources/map/"+nom);
+        File fkid = new File("Ressources/kid/"+nom);
+        try
+        {
+            PrintWriter pw = new PrintWriter (new BufferedWriter (new FileWriter (fmap)));
+            pw.println("J " + sizeX+" "+sizeY);
+            for (int y=0; y<sizeY; y++){
+                for (int x=0; x<sizeX; x++){
+                    if (gameMap[y][x].getObj().equals(Obj.EGG)){
+                        pw.println("C " + x + "-" + y + " " + gameMap[y][x].getNumberEggs());
+                    } else if (gameMap[y][x].getObj().equals(Obj.EGG)){
+                        pw.println("R " + x + "-" + y);
+                    }
+                }
+            }
+            pw.close();
+            pw = new PrintWriter (new BufferedWriter (new FileWriter (fkid)));
+
+            for (Kid kid : listKid){
+                String s = kid.getPath().toString();
+                s = s.replaceAll("\\[","");
+                s = s.replaceAll("\\]","");
+                s = s.replaceAll(",","");
+                s = s.replaceAll(" ","");
+                pw.println("E " + kid.getPosX() + "-" + kid.getPosY() + " " + kid.getStartDirection() + " " + s + " " + "ORDI");
+            }
+            pw.close();
+        }
+        catch (IOException exception)
+        {
+            System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
+        }
+
     }
 
     public Image chargerImage(String nomImg) {
@@ -290,11 +350,6 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                             gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setNumberEggs(0);
                             break;
                     }
-                    /*if (gameMap[e.getY()/blocSize-1][e.getX()/blocSize].getObj().equals(Obj.JARDIN))
-                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.ROCK);
-                    else
-                        gameMap[e.getY()/blocSize-1][e.getX()/blocSize].setObj(Obj.JARDIN);
-                        */
                 }
                 // si on clique dans le HUD pour choisir un objet à rajouter
                 if (e.getX() > blocSize / 2 && e.getX() < 15 * blocSize / 2 && e.getY() > 2 * blocSize + sizeY * blocSize && e.getY() < 3 * blocSize + sizeY * blocSize) {
@@ -315,21 +370,25 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                         objActuel = Obj.KID;
                         kidActual = new Kid(0);
                         kidActual.setDirection('E');
+                        kidActual.setStartDirection('E');
                     } else if (e.getX() > 9 * blocSize / 2 && e.getX() < 11 * blocSize / 2) {
                         objImgActuel = kidN;
                         objActuel = Obj.KID;
                         kidActual = new Kid(0);
+                        kidActual.setStartDirection('N');
                         kidActual.setDirection('N');
                     } else if (e.getX() > 11 * blocSize / 2 && e.getX() < 13 * blocSize / 2) {
                         objImgActuel = kidW;
                         objActuel = Obj.KID;
                         kidActual = new Kid(0);
+                        kidActual.setStartDirection('W');
                         kidActual.setDirection('W');
                     } else if (e.getX() > 13 * blocSize / 2 && e.getX() < 15 * blocSize / 2) {
                         objImgActuel = kidS;
                         objActuel = Obj.KID;
                         kidActual = new Kid(0);
                         kidActual.setDirection('S');
+                        kidActual.setStartDirection('S');
                     }
 
                 }
@@ -343,15 +402,18 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                             case 'N':
                                 yPathActuel--;
                                 kidActual.setPosY(yPathActuel);
-                                System.out.println("au dessus");
+                                kidActual.getPath().add('A');
                                 break;
                             case 'W':
+                                kidActual.getPath().add('D');
+                                kidActual.setDirection('N');
+                                break;
                             case 'E':
-                                System.out.println("au dessus");
+                                kidActual.getPath().add('G');
                                 kidActual.setDirection('N');
                                 break;
                             case 'S':
-                                System.out.println("au dessus");
+                                kidActual.getPath().add('D');
                                 kidActual.setDirection('W');
                                 break;
                         }
@@ -367,14 +429,19 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                                 yPathActuel++;
                                 System.out.println("en dessous");
                                 kidActual.setPosY(yPathActuel);
+                                kidActual.getPath().add('A');
                                 break;
                             case 'W':
+                                kidActual.getPath().add('G');
+                                kidActual.setDirection('S');
+                                break;
                             case 'E':
-                                System.out.println("en dessous");
+                                kidActual.getPath().add('D');
                                 kidActual.setDirection('S');
                                 break;
                             case 'N':
                                 System.out.println("en dessous");
+                                kidActual.getPath().add('D');
                                 kidActual.setDirection('E');
                                 break;
                         }
@@ -390,13 +457,19 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                                 xPathActuel++;
                                 System.out.println("a droite");
                                 kidActual.setPosX(xPathActuel);
+                                kidActual.getPath().add('A');
                                 break;
                             case 'N':
+                                kidActual.setDirection('E');
+                                kidActual.getPath().add('D');
+                                break;
                             case 'S':
+                                kidActual.getPath().add('G');
                                 System.out.println("a droite");
                                 kidActual.setDirection('E');
                                 break;
                             case 'W':
+                                kidActual.getPath().add('D');
                                 System.out.println("a droite");
                                 kidActual.setDirection('N');
                                 break;
@@ -414,19 +487,27 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                                 xPathActuel--;
                                 System.out.println("a gauche");
                                 kidActual.setPosX(xPathActuel);
+                                kidActual.getPath().add('A');
                                 break;
                             case 'N':
+                                kidActual.setDirection('W');
+                                kidActual.getPath().add('D');
+                                break;
                             case 'S':
                                 System.out.println("a gauche");
+                                kidActual.getPath().add('G');
                                 kidActual.setDirection('W');
                                 break;
                             case 'E':
+                                kidActual.getPath().add('D');
                                 System.out.println("a gauche");
                                 kidActual.setDirection('S');
                                 break;
                         }
                     }
                 }
+                hud.printPath(kidActual.getPath());
+                hud.repaint();
             }
             repaint();
             BLOCKED = false;
@@ -466,4 +547,5 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     private void addSelected (int posX){
         // ici on mettra en valeur quelle obj est selectionné.
     }
+
 }

@@ -43,6 +43,8 @@ public class Kid extends Character {
 
     private JProgressBar jBar;
 
+    private char startDirection;
+
 
     public Kid(int max){
         path = new ArrayList<java.lang.Character>();
@@ -152,4 +154,11 @@ public class Kid extends Character {
     }
 
 
+    public char getStartDirection() {
+        return startDirection;
+    }
+
+    public void setStartDirection(char startDirection) {
+        this.startDirection = startDirection;
+    }
 }

@@ -2,6 +2,8 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.*;
+import java.lang.Character;
 import java.util.ArrayList;
 
 /**
@@ -18,9 +20,13 @@ public class HUD extends JPanel {
     private Image kidW;
     private Image kidS;
     private Image kidN;
+    private Image A;
+    private Image G;
+    private Image D;
     private int kidActual;
     private int kidMax;
     private int blocSize;
+    private ArrayList<Character> path;
 
     public int getEtape() {
         return etape;
@@ -59,6 +65,7 @@ public class HUD extends JPanel {
         this.setPreferredSize(new Dimension(sizeX,sizeHUD));
         this.setLayout(new GridLayout(sizeY-2, 2));
         this.setVisible(true);
+        path = new ArrayList<Character>();
         repaint();
     }
 
@@ -69,10 +76,7 @@ public class HUD extends JPanel {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-
         afficheEditeur(g);
-
-        repaint();
     }
 
     public void afficheEditeur(Graphics g){
@@ -84,11 +88,35 @@ public class HUD extends JPanel {
             afficherImage(kidN,9*blocSize/2,sizeY+blocSize,g);
             afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g);
             afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g);
-        } else if (etape == 2){
+        } else if (etape == 2) {
+            System.out.println("REFRESH");
             g.setFont(font);
             g.setColor(Color.black);
-            String str = "Enfant : " + (kidActual+1) + " / " + kidMax;
-            g.drawString(str, sizeY+blocSize, blocSize);
+            String str = "Enfant : " + (kidActual + 1) + " / " + kidMax;
+            g.drawString(str, 10, blocSize / 2);
+            int x = 2;
+            int y = 0;
+            if (path != null) {
+                for (java.lang.Character c : path) {
+                    x++;
+                    if (x == sizeX) {
+                        y++;
+                        x = 0;
+                    }
+                    switch (c) {
+                        case 'A':
+                            afficherImage(A, x * blocSize, y * blocSize, g);
+                            break;
+                        case 'G':
+                            afficherImage(G, x * blocSize, y * blocSize, g);
+                            break;
+                        case 'D':
+                            afficherImage(D, x * blocSize, y * blocSize, g);
+                            break;
+                    }
+                    //System.out.println("AJOUT : "+c);
+                }
+            }
         }
 
     }
@@ -101,6 +129,9 @@ public class HUD extends JPanel {
         kidW  = chargerImage("O1");
         kidS  = chargerImage("S1");
         kidN  = chargerImage("N1");
+        A  = chargerImage("A");
+        G  = chargerImage("G");
+        D  = chargerImage("D");
     }
 
     public Image chargerImage(String nomImg) {
@@ -117,5 +148,14 @@ public class HUD extends JPanel {
 
     public void setKidMax(int kidMax) {
         this.kidMax = kidMax;
+    }
+
+    public void printPath(ArrayList<java.lang.Character> path) {
+        setPath(path);
+    }
+
+    public void setPath(ArrayList<Character> path) {
+        this.path = path;
+        repaint();
     }
 }

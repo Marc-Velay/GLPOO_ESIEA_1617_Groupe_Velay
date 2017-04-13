@@ -73,7 +73,7 @@ public class Garden extends JFrame{
     protected void initEditeur(){
         listKid = new ArrayList<Kid>();
         loadMap();
-        fps = 10;
+        fps = 1;
         maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
 
