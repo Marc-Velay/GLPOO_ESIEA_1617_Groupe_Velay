@@ -44,11 +44,25 @@ public class Garden extends JFrame{
 
     public Garden () {
         sizeHUD = 150;
+        listKid = new ArrayList<Kid>();
+
+    }
+
+    public Garden (String fileName, MiniView miniView) {
+        this.filenameMap = fileName;
+        sizeHUD = 150;
+        listKid = new ArrayList<Kid>();
+        loadMap();
+        blocSize = 25;
+        maxEgg = 0;
+        gameMap = new MapObjects[sizeY][sizeX];
+        initMap();
+        loadItemsEditeurMini();
+        fps = 1;
+        tRepaint = new Timer(1000/fps, (ActionListener) miniView);
     }
 
     protected void initUI(){
-        listKid = new ArrayList<Kid>();
-        listKidDone = new ArrayList<Kid>();
         loadMap();
         fps = 1;
         maxEgg = 0;
@@ -71,8 +85,8 @@ public class Garden extends JFrame{
     }
 
     protected void initEditeur(){
-        listKid = new ArrayList<Kid>();
-        loadMap();
+        loadMapEditeur();
+        blocSize = 50;
         fps = 10;
         maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
@@ -97,6 +111,22 @@ public class Garden extends JFrame{
         tRepaint.start();
     }
 
+    private void loadMapEditeur() {
+        AskDialog askDialog = new AskDialog(null, "Taille de la carte", true);
+        while (!askDialog.isOver()){
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(askDialog.getX());
+        System.out.println(askDialog.getY());
+        sizeX = askDialog.getX()+2;
+        sizeY = askDialog.getY()+2;
+        askDialog.setVisible(false);
+
+    }
 
 
     public void loadMap (){
@@ -120,7 +150,6 @@ public class Garden extends JFrame{
         fic.close();
         for (Kid kid : listKid)
             System.out.println(kid);
-        hud.init(listKid);
     }
 
     private Scanner openFile (String nomFichier){
@@ -147,6 +176,12 @@ public class Garden extends JFrame{
     }
 
     public void loadItems() {
+        loadEggsAndRock();
+        loadKids();
+        hud.init(listKid);
+    }
+
+    public void loadItemsEditeurMini() {
         loadEggsAndRock();
         loadKids();
     }

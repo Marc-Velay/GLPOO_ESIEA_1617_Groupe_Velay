@@ -506,7 +506,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                         }
                     }
                 }
-                hud.printPath(kidActual.getPath());
+                if (kidActual!=null)
+                    hud.printPath(kidActual.getPath());
                 hud.repaint();
             }
             repaint();
