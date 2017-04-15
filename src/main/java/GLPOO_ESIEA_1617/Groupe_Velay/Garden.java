@@ -28,7 +28,6 @@ public class Garden extends JFrame{
     private Editeur mapEdit;
     private HUD hud;
     private ArrayList<Kid> listKid;
-    private ArrayList<Kid> listKidDone;
     private int maxEgg;
 
     public Timer gettRepaint() {
@@ -49,7 +48,9 @@ public class Garden extends JFrame{
     }
 
     public Garden (String fileName, MiniView miniView) {
-        this.filenameMap = fileName;
+        this.filenameMap = "Ressources/map/"+fileName;
+        this.filenameKids = "Ressources/kid/"+fileName;
+        System.out.println(this.filenameKids);
         sizeHUD = 150;
         listKid = new ArrayList<Kid>();
         loadMap();
@@ -78,40 +79,41 @@ public class Garden extends JFrame{
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         tRepaint = new Timer(1000/fps, (ActionListener) map);
         tRepaint.start();
     }
 
     protected void initEditeur(){
-        loadMapEditeur();
-        blocSize = 50;
-        fps = 10;
-        maxEgg = 0;
-        gameMap = new MapObjects[sizeY][sizeX];
+        if(loadMapEditeur()) {
+            blocSize = 50;
+            fps = 10;
+            maxEgg = 0;
+            gameMap = new MapObjects[sizeY][sizeX];
 
-        initMap();
-        hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
-        hud.initEditeur();
-        hud.repaint();
-        mapEdit = new Editeur(sizeY,sizeX,blocSize,gameMap, listKid, hud);
-        this.addMouseListener((MouseListener) mapEdit);
-        this.addMouseMotionListener((MouseMotionListener) mapEdit);
-        this.setTitle("Editeur");
-        this.setSize(sizeX*blocSize, sizeY*blocSize+40+sizeHUD);
-        this.add(mapEdit, BorderLayout.CENTER);
-        this.add(hud, BorderLayout.SOUTH);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+            initMap();
+            hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
+            hud.initEditeur();
+            hud.repaint();
+            mapEdit = new Editeur(sizeY, sizeX, blocSize, gameMap, listKid, hud, this);
+            this.addMouseListener((MouseListener) mapEdit);
+            this.addMouseMotionListener((MouseMotionListener) mapEdit);
+            this.setTitle("Editeur");
+            this.setSize(sizeX * blocSize, sizeY * blocSize + 40 + sizeHUD);
+            this.add(mapEdit, BorderLayout.CENTER);
+            this.add(hud, BorderLayout.SOUTH);
+            this.setResizable(false);
+            this.setLocationRelativeTo(null);
+            this.setVisible(true);
+            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        tRepaint = new Timer(1000/fps, (ActionListener) mapEdit);
-        tRepaint.start();
+            tRepaint = new Timer(1000 / fps, (ActionListener) mapEdit);
+            tRepaint.start();
+        }
     }
 
-    private void loadMapEditeur() {
+    private boolean loadMapEditeur() {
         AskDialog askDialog = new AskDialog(null, "Taille de la carte", true);
         while (!askDialog.isOver()){
             try {
@@ -120,11 +122,16 @@ public class Garden extends JFrame{
                 e.printStackTrace();
             }
         }
-        System.out.println(askDialog.getX());
-        System.out.println(askDialog.getY());
-        sizeX = askDialog.getX()+2;
-        sizeY = askDialog.getY()+2;
-        askDialog.setVisible(false);
+        if (askDialog.isCancel()){
+            return false;
+        } else {
+            System.out.println(askDialog.getX());
+            System.out.println(askDialog.getY());
+            sizeX = askDialog.getX()+2;
+            sizeY = askDialog.getY()+2;
+            askDialog.setVisible(false);
+            return true;
+        }
 
     }
 
@@ -140,6 +147,8 @@ public class Garden extends JFrame{
     }
 
     protected void loadKids(){
+        System.out.println(this.filenameKids);
+
         String line = "";
         fic = openFile(filenameKids);
         while (fic.hasNextLine()){

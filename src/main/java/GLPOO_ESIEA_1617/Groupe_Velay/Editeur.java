@@ -46,7 +46,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
     private int etape;
     private HUD hud;
 
-    public Editeur(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMap, ArrayList<Kid> listKid, HUD hud){
+    public Editeur(int sizeY, int sizeX, int blocSize, MapObjects[][] gameMap, ArrayList<Kid> listKid, HUD hud, Garden garden){
+        this.garden = garden;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.blocSize = blocSize;
@@ -260,11 +261,11 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         {
             PrintWriter pw = new PrintWriter (new BufferedWriter (new FileWriter (fmap)));
             pw.println("J " + sizeX+" "+sizeY);
-            for (int y=0; y<sizeY; y++){
-                for (int x=0; x<sizeX; x++){
+            for (int y=1; y<sizeY-1; y++){
+                for (int x=1; x<sizeX-1; x++){
                     if (gameMap[y][x].getObj().equals(Obj.EGG)){
                         pw.println("C " + x + "-" + y + " " + gameMap[y][x].getNumberEggs());
-                    } else if (gameMap[y][x].getObj().equals(Obj.EGG)){
+                    } else if (gameMap[y][x].getObj().equals(Obj.ROCK)){
                         pw.println("R " + x + "-" + y);
                     }
                 }
@@ -278,7 +279,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                 s = s.replaceAll("\\]","");
                 s = s.replaceAll(",","");
                 s = s.replaceAll(" ","");
-                pw.println("E " + kid.getPosX() + "-" + kid.getPosY() + " " + kid.getStartDirection() + " " + s + " " + "ORDI");
+                pw.println("E " + kid.getStartPosX() + "-" + kid.getStartPosY() + " " + kid.getStartDirection() + " " + s + " " + "ORDI");
             }
             pw.close();
         }
@@ -286,6 +287,8 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         {
             System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
         }
+
+        garden.dispose();
 
     }
 
@@ -339,11 +342,14 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                             gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setNumberEggs(0);
                             kidActual.setPosX(e.getX() / blocSize);
                             kidActual.setPosY(e.getY() / blocSize - 1);
+                            kidActual.setStartPosX(e.getX() / blocSize);
+                            kidActual.setStartPosY(e.getY() / blocSize - 1);
                             listKid.add(kidActual);
                             deleteKid(e.getY() / blocSize - 1, e.getX() / blocSize);
                             System.out.println(listKid);
                             kidActual = new Kid(0);
                             kidActual.setDirection(oldDirection);
+                            kidActual.setStartDirection(oldDirection);
                             break;
                         case JARDIN:
                             gameMap[e.getY() / blocSize - 1][e.getX() / blocSize].setObj(Obj.JARDIN);

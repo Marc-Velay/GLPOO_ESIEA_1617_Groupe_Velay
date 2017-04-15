@@ -1,5 +1,7 @@
 package GLPOO_ESIEA_1617.Groupe_Velay;
 
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,7 +36,8 @@ public class MiniView extends JPanel implements ActionListener {
 
 
     public MiniView (String fic){
-        garden = new Garden(fic, this);
+        System.out.println(fic.substring(15));
+        garden = new Garden(fic.substring(15), this);
         loadImages();
         this.setVisible(true);
     }

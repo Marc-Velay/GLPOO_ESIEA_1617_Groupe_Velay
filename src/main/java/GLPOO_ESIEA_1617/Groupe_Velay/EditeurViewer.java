@@ -42,7 +42,7 @@ public class EditeurViewer extends JPanel implements ActionListener {
     File[] filp = fp.listFiles();
 
     public EditeurViewer(){
-        f.setSize(930, 735);
+        f.setSize(930, 795);
 
         for (int i=0; i<filp.length; i++)	{
             System.out.println("Ressources/map/"+filp[i].getName());
