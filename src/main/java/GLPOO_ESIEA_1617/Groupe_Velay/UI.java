@@ -87,6 +87,7 @@ public class UI extends JPanel implements ActionListener {
         }
     }
 
+    
     private void affichePath(Kid kid, Graphics g) {
         if (kid.getGrapheAStar().isPathExist()) {
             for (int i = 1; i < kid.getPathA().getPath().size(); i++) {
