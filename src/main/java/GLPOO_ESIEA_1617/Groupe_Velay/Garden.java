@@ -2,9 +2,7 @@ package GLPOO_ESIEA_1617.Groupe_Velay;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +28,16 @@ public class Garden extends JFrame{
     private ArrayList<Kid> listKid;
     private ArrayList<Point> listEgg;
     private int maxEgg;
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    private Mode mode;
 
     public Timer gettRepaint() {
         return tRepaint;
@@ -98,6 +106,9 @@ public class Garden extends JFrame{
             hud.initEditeur();
             hud.repaint();
             mapEdit = new Editeur(sizeY, sizeX, blocSize, gameMap, listKid, hud, this);
+            KeyListener k = new KeyListener(mapEdit);
+            this.addKeyListener(k);
+            this.setFocusable(true);
             this.addMouseListener((MouseListener) mapEdit);
             this.addMouseMotionListener((MouseMotionListener) mapEdit);
             this.setTitle("Editeur");

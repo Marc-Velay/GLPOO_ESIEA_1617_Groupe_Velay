@@ -20,11 +20,14 @@ public class Menu extends JFrame implements ActionListener{
     private JButton bSelectMap;
     private JButton bBotPlay;
     private JButton bQuit;
+    private Garden garden;
 
     public Menu(){
         this.setLayout(new GridLayout(5,1));
         this.setSize(400,600);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        garden = new Garden();
 
 
         bPlay = new JButton("Play");
@@ -51,23 +54,30 @@ public class Menu extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bPlay){
             System.out.println("Lancement d'une partie");
-            Garden garden = new Garden();
+            garden = new Garden();
+            garden.setMode(Mode.Normal);
             garden.initUI();
             garden.loadItems();
         }
         else if (e.getSource() == bBotPlay){
             System.out.println("Lancement d'une partie avec l'ordinateur");
-
+            garden = new Garden();
+            garden.setMode(Mode.Auto);
+            garden.initUI();
+            garden.loadItems();
 
         }
         else if (e.getSource() == bEditeur){
             System.out.println("Lancement de l'éditeur");
-            Garden garden = new Garden();
+            garden = new Garden();
+            garden.setMode(Mode.Normal);
             garden.initEditeur();
         }
         else if (e.getSource() == bSelectMap){
             System.out.println("Choix de la carte et des enfants");
             EditeurViewer edV = new EditeurViewer();
+            // affichage presque OK En faire quelque chose choix de la map mode auto ou pas
+            // correction des bugs a faire
         }
         else if (e.getSource() == bQuit){
             System.out.println("Exit");

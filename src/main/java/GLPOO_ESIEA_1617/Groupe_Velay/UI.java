@@ -87,9 +87,9 @@ public class UI extends JPanel implements ActionListener {
         }
     }
 
-    
+
     private void affichePath(Kid kid, Graphics g) {
-        if (kid.getGrapheAStar().isPathExist()) {
+        if (kid.getGrapheAStar().isPathExist() && !gameMap[kid.getPosY()][kid.getPosY()].getObj().equals(Obj.EGGANDKID)) {
             for (int i = 1; i < kid.getPathA().getPath().size(); i++) {
                 afficherImage(kidPath, kid.getPathA().getPath().get(i).getX() * blocSize, kid.getPathA().getPath().get(i).getY() * blocSize, g);
             }
