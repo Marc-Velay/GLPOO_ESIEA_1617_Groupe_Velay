@@ -120,15 +120,15 @@ public class GardenTest {
     }
 
     private MapObjects newBlock(){
-        return new MapObjects(new ArrayList<Egg>(),Obj.ROCK,true,0);
+        return new MapObjects(new ArrayList<Egg>(),Obj.ROCK,true,0, 10, 10);
     }
 
     private MapObjects newJardin(){
-        return new MapObjects(new ArrayList<Egg>(),Obj.JARDIN,false,0);
+        return new MapObjects(new ArrayList<Egg>(),Obj.JARDIN,false,0, 10, 10);
     }
 
     private MapObjects newEgg(int nombre){
-        MapObjects MO = new MapObjects(new ArrayList<Egg>(),Obj.EGG,false,nombre);
+        MapObjects MO = new MapObjects(new ArrayList<Egg>(),Obj.EGG,false,nombre, 10, 10);
         for (int i=0; i<nombre; i++){
             MO.getListEgg().add(new Egg());
         }
@@ -136,7 +136,7 @@ public class GardenTest {
     }
 
     private MapObjects newKid(){
-        return new MapObjects(new ArrayList<Egg>(),Obj.KID,true,0);
+        return new MapObjects(new ArrayList<Egg>(),Obj.KID,true,0, 10, 10);
     }
 
 

@@ -8,6 +8,8 @@ public class MapObjects {
 	private Obj obj;
 	private boolean busy;
 	private int numberEggs;
+	private GrapheAStar grapheAStar;
+	private int dist;
 
 
     public Obj getObj() {
@@ -18,18 +20,22 @@ public class MapObjects {
         this.obj = obj;
     }
 
-    public MapObjects() {
+    public MapObjects(int sizeX, int sizeY) {
         listEgg = new ArrayList<Egg>();
         numberEggs = 0;
         obj = Obj.JARDIN;
         busy = false;
+        grapheAStar = new GrapheAStar(sizeX, sizeY);
+        dist = Integer.MAX_VALUE;
     }
 
-    public MapObjects(ArrayList<Egg> listEgg, Obj obj, boolean busy, int numberEggs) {
+    public MapObjects(ArrayList<Egg> listEgg, Obj obj, boolean busy, int numberEggs, int sizeX, int sizeY) {
         this.listEgg = listEgg;
         this.obj = obj;
         this.busy = busy;
         this.numberEggs = numberEggs;
+        grapheAStar = new GrapheAStar(sizeX, sizeY);
+        dist = Integer.MAX_VALUE;
     }
 
     public ArrayList<Egg> getListEgg() {
@@ -57,6 +63,19 @@ public class MapObjects {
     }
 
 
+    public GrapheAStar getGrapheAStar() {
+        return grapheAStar;
+    }
 
-	
+    public void setGrapheAStar(GrapheAStar grapheAStar) {
+        this.grapheAStar = grapheAStar;
+    }
+
+    public int getDist() {
+        return dist;
+    }
+
+    public void setDist(int dist) {
+        this.dist = dist;
+    }
 }

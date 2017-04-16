@@ -28,6 +28,7 @@ public class Garden extends JFrame{
     private Editeur mapEdit;
     private HUD hud;
     private ArrayList<Kid> listKid;
+    private ArrayList<Point> listEgg;
     private int maxEgg;
 
     public Timer gettRepaint() {
@@ -43,8 +44,8 @@ public class Garden extends JFrame{
 
     public Garden () {
         sizeHUD = 150;
-        listKid = new ArrayList<Kid>();
-
+        listKid = new ArrayList<>();
+        listEgg = new ArrayList<>();
     }
 
     public Garden (String fileName, MiniView miniView) {
@@ -69,7 +70,7 @@ public class Garden extends JFrame{
         maxEgg = 0;
         gameMap = new MapObjects[sizeY][sizeX];
 
-        map = new UI(sizeY,sizeX,blocSize,gameMap,listKid);
+        map = new UI(sizeY,sizeX,blocSize,gameMap,listKid, listEgg);
         hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
         initMap();
         this.setTitle("Garden");
@@ -178,7 +179,7 @@ public class Garden extends JFrame{
     protected void initMap(){
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
-                gameMap[y][x] = new MapObjects();
+                gameMap[y][x] = new MapObjects(sizeX, sizeY);
             }
         }
         initBorderMap();
@@ -271,7 +272,7 @@ public class Garden extends JFrame{
                 System.out.println("Chargement d'un enfant sur un rocher : FIRST BLOOD");
             }
             else {
-                Kid kid = new Kid(maxEgg);
+                Kid kid = new Kid(maxEgg, sizeX, sizeY);
                 final char direction = line.charAt(6);
                 kid.initPos(posX,posY,direction);
                 ArrayList<Character> name = new ArrayList<Character>();
@@ -382,5 +383,13 @@ public class Garden extends JFrame{
 
     public void setListKid(ArrayList<Kid> listKid) {
         this.listKid = listKid;
+    }
+
+    public ArrayList<Point> getListEgg() {
+        return listEgg;
+    }
+
+    public void setListEgg(ArrayList<Point> listEgg) {
+        this.listEgg = listEgg;
     }
 }

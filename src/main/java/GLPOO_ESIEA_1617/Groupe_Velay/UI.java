@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class UI extends JPanel implements ActionListener {
+    private final ArrayList<Point> listEgg;
     private Image rock;
     private Image terre;
     private Image oeuf;
@@ -15,6 +16,7 @@ public class UI extends JPanel implements ActionListener {
     private Image kidW;
     private Image kidS;
     private Image kidN;
+    private Image kidPath;
     private Font font = new Font("Courier", Font.BOLD, 20);
     private int sizeX;
     private int sizeY;
@@ -24,12 +26,13 @@ public class UI extends JPanel implements ActionListener {
 
 
 
-    public UI(int sizeY, int sizeX, int blocSize, MapObjects [][]gameMap, ArrayList<Kid> listKid){
+    public UI(int sizeY, int sizeX, int blocSize, MapObjects[][] gameMap, ArrayList<Kid> listKid, ArrayList<Point> listEgg){
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.blocSize = blocSize;
         this.gameMap = gameMap;
         this.listKid = listKid;
+        this.listEgg = listEgg;
         loadImages();
     }
 
@@ -66,6 +69,7 @@ public class UI extends JPanel implements ActionListener {
     }
     private void drawKids(Graphics g){
         for (Kid kid : listKid){
+            affichePath(kid, g);
             switch (kid.getDirection()){
                 case 'E':
                     afficherImage(kidE,kid.getPosX()*blocSize,kid.getPosY()*blocSize,g);
@@ -83,6 +87,14 @@ public class UI extends JPanel implements ActionListener {
         }
     }
 
+    private void affichePath(Kid kid, Graphics g) {
+        if (kid.getGrapheAStar().isPathExist()) {
+            for (int i = 1; i < kid.getPathA().getPath().size(); i++) {
+                afficherImage(kidPath, kid.getPathA().getPath().get(i).getX() * blocSize, kid.getPathA().getPath().get(i).getY() * blocSize, g);
+            }
+        }
+    }
+
     private void afficherImage(Image img, int x, int y, Graphics g) {
         g.drawImage(img, x, y, this);
         Toolkit.getDefaultToolkit().sync();
@@ -96,11 +108,24 @@ public class UI extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        updateListEgg();
         for (Kid kid : listKid){
             kid.move(gameMap);
+            kid.updatePath(listEgg, gameMap);
         }
         //System.out.println("time B : " + System.currentTimeMillis());
         repaint();
+    }
+
+    private void updateListEgg() {
+        listEgg.clear();
+        for (int y = 1; y<sizeY-1; y++){
+            for (int x = 1; x<sizeX-1; x++ ){
+                if (gameMap[y][x].getObj().equals(Obj.EGG)){
+                    listEgg.add(new Point(x, y));
+                }
+            }
+        }
     }
 
     public Image chargerImage(String nomImg) {
@@ -119,8 +144,15 @@ public class UI extends JPanel implements ActionListener {
         kidW = chargerImage("O1");
         kidS = chargerImage("S1");
         kidN = chargerImage("N1");
+        kidPath = chargerImage("path");
     }
 
 
+    public Image getKidPath() {
+        return kidPath;
+    }
 
+    public void setKidPath(Image kidPath) {
+        this.kidPath = kidPath;
+    }
 }

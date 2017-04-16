@@ -287,7 +287,6 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
         {
             System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
         }
-
         garden.dispose();
 
     }
@@ -347,7 +346,7 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                             listKid.add(kidActual);
                             deleteKid(e.getY() / blocSize - 1, e.getX() / blocSize);
                             System.out.println(listKid);
-                            kidActual = new Kid(0);
+                            kidActual = new Kid(0, sizeX, sizeY);
                             kidActual.setDirection(oldDirection);
                             kidActual.setStartDirection(oldDirection);
                             break;
@@ -374,29 +373,28 @@ public class Editeur extends JPanel implements ActionListener,MouseListener, Mou
                     } else if (e.getX() > 7 * blocSize / 2 && e.getX() < 9 * blocSize / 2) {
                         objImgActuel = kidE;
                         objActuel = Obj.KID;
-                        kidActual = new Kid(0);
+                        kidActual = new Kid(0, sizeX, sizeY);
                         kidActual.setDirection('E');
                         kidActual.setStartDirection('E');
                     } else if (e.getX() > 9 * blocSize / 2 && e.getX() < 11 * blocSize / 2) {
                         objImgActuel = kidN;
                         objActuel = Obj.KID;
-                        kidActual = new Kid(0);
+                        kidActual = new Kid(0, sizeX, sizeY);
                         kidActual.setStartDirection('N');
                         kidActual.setDirection('N');
                     } else if (e.getX() > 11 * blocSize / 2 && e.getX() < 13 * blocSize / 2) {
                         objImgActuel = kidW;
                         objActuel = Obj.KID;
-                        kidActual = new Kid(0);
+                        kidActual = new Kid(0, sizeX, sizeY);
                         kidActual.setStartDirection('W');
                         kidActual.setDirection('W');
                     } else if (e.getX() > 13 * blocSize / 2 && e.getX() < 15 * blocSize / 2) {
                         objImgActuel = kidS;
                         objActuel = Obj.KID;
-                        kidActual = new Kid(0);
+                        kidActual = new Kid(0, sizeX, sizeY);
                         kidActual.setDirection('S');
                         kidActual.setStartDirection('S');
                     }
-
                 }
             }
             else if (etape==2){
