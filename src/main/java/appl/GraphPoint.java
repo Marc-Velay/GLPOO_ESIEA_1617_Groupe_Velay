@@ -1,13 +1,13 @@
-package GLPOO_ESIEA_1617.Groupe_Velay;
+package appl;
 
-public class Point {
+public class GraphPoint {
 	private int X;
 	private int Y;
 	
-	public Point(){
+	public GraphPoint(){
 		
 	}
-	public Point(int x, int y) {
+	public GraphPoint(int x, int y) {
 		super();
 		X = x;
 		Y = y;

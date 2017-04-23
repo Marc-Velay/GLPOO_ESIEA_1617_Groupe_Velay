@@ -1,4 +1,4 @@
-package GLPOO_ESIEA_1617.Groupe_Velay;
+package appl;
 
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class GrapheAStar {
 
 
 
-	public void initAStar(MapObjects[][]map, int X1, int Y1, int X2, int Y2){
+	public void initAStar(GameObjects[][]map, int X1, int Y1, int X2, int Y2){
 		Node S = new Node(X1,Y1);
 		setS(S);
 		Node D = new Node(X2,Y2);
@@ -36,7 +36,7 @@ public class GrapheAStar {
 		V = new ArrayList<Node>();
 	}
 
-	private void aStar(Node S, Node D,MapObjects[][]map){
+	private void aStar(Node S, Node D,GameObjects[][]map){
 		V.clear();
 		E.clear();
 		Node X = new Node();
@@ -51,34 +51,20 @@ public class GrapheAStar {
 		// IL FAUT GERER QUAND IL n'y A PAS DE CHEMIN
 		//-------------------------------------------
 		while(!E.isEmpty() && !isContained(E,D)){
-			/*System.out.println();
-			System.out.println("----------------------------\nENTRER BOUCLE\n----------------------------");
-			System.out.println("Liste E");
-			for (int i = 0; i<E.size(); i++){
-				System.out.println("Node : (" + E.get(i).getX()+","+E.get(i).getY()+") dist = : " + E.get(i).getDist() + " pred : " + E.get(i).getPred());
-			}
-			System.out.println();
-			System.out.println("Liste V");
-			for (int i = 0; i<V.size(); i++){
-				System.out.println("Node : (" + V.get(i).getX()+","+V.get(i).getY()+") dist = : " + V.get(i).getDist() + " pred : " + V.get(i).getPred());
-			}
-			System.out.println();*/
 			X = E.get(0);
 			E.remove(0);
 			V.add(X);
-			//System.out.println("Noeud choisi : (" + X.getX()+","+X.getY()+") dist = : " + X.getDist() + " pred : " + X.getPred());
-
+			
 			// Up
 			if (X.getY()>0){
 				T.setX(X.getX());
 				T.setY(X.getY()-1);
-				if (!map[T.getY()][T.getX()].isBusy() && !isContained(V,T)) // add node up in E
+				if (!map[T.getY()][T.getX()].isOccupied() && !isContained(V,T)) // add node up in E
 				{
 					T.setDistSource(X.getDistSource()+1);
 					T.setDist(T.getDistSource()+calculDistH(T,D));
 					T.setPred('D');
 					addSortedNode(E,T);
-					//System.out.println("add UP");
 				}
 
 			}
@@ -86,13 +72,12 @@ public class GrapheAStar {
 			if (X.getY()<H-1){
 				T.setX(X.getX());
 				T.setY(X.getY()+1);
-				if (!map[T.getY()][T.getX()].isBusy() && !isContained(V,T)) // add node down in E
+				if (!map[T.getY()][T.getX()].isOccupied() && !isContained(V,T)) // add node down in E
 				{
 					T.setDistSource(X.getDistSource()+1);
 					T.setDist(T.getDistSource()+calculDistH(T,D));
 					T.setPred('U');
 					addSortedNode(E,T);
-					//System.out.println("add DOWN");
 				}
 			}
 
@@ -100,7 +85,7 @@ public class GrapheAStar {
 			if (X.getX()<W-1){
 				T.setX(X.getX()+1);
 				T.setY(X.getY());
-				if (!map[T.getY()][T.getX()].isBusy() && !isContained(V,T)) // add node right in E
+				if (!map[T.getY()][T.getX()].isOccupied() && !isContained(V,T)) // add node right in E
 				{
 					T.setDistSource(X.getDistSource()+1);
 					T.setDist(T.getDistSource()+calculDistH(T,D));
@@ -113,7 +98,7 @@ public class GrapheAStar {
 			if (X.getX()>0){
 				T.setX(X.getX()-1);
 				T.setY(X.getY());
-				if (!map[T.getY()][T.getX()].isBusy() && !isContained(V,T)) // add node left in E
+				if (!map[T.getY()][T.getX()].isOccupied() && !isContained(V,T)) // add node left in E
 				{
 					T.setDistSource(X.getDistSource()+1);
 					T.setDist(T.getDistSource()+calculDistH(T,D));
@@ -137,7 +122,7 @@ public class GrapheAStar {
 
 	}
 
-	// renvoi si le noeud est dans la liste en vérifiant juste ses positions
+	// renvoi si le noeud est dans la liste en vï¿½rifiant juste ses positions
 	private boolean isContained(ArrayList<Node> L, Node A){
 		for (int i=0; i<L.size(); i++){
 			if (A.getX() == L.get(i).getX() && A.getY() == L.get(i).getY())
@@ -151,13 +136,13 @@ public class GrapheAStar {
 			Path path = new Path(true);
 			Node P = new Node(V.get(V.size()-1));
 			while (P.getPred()!='S'){
-				path.add(new Point(P.getX(),P.getY()));
+				path.add(new GraphPoint(P.getX(),P.getY()));
 				if (P.getPred()=='U')		P = extractFromList(P.getX(),P.getY()-1);
 				else if (P.getPred()=='D')	P = extractFromList(P.getX(),P.getY()+1);
 				else if (P.getPred()=='R')	P = extractFromList(P.getX()+1,P.getY());
 				else if (P.getPred()=='L')	P = extractFromList(P.getX()-1,P.getY());
 			}
-			path.add(new Point(P.getX(),P.getY()));
+			path.add(new GraphPoint(P.getX(),P.getY()));
 			for (int i = 0; i< path.getPath().size(); i++){
 				System.out.print("("+ path.getPath().get(i).getX()+","+path.getPath().get(i).getY()+") -> ");
 			}
@@ -185,7 +170,7 @@ public class GrapheAStar {
 	}
 
 	private void addSortedNode (ArrayList<Node> L, Node A){
-		// on utilise un nouveau noeud pour éviter des problèmes de références
+		// on utilise un nouveau noeud pour ï¿½viter des problï¿½mes de rï¿½fï¿½rences
 		Node Ad = new Node();
 		Ad.setDist(A.getDist());
 		Ad.setDistSource(A.getDistSource());

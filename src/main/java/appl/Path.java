@@ -1,17 +1,17 @@
-package GLPOO_ESIEA_1617.Groupe_Velay;
+package appl;
 
 import java.util.ArrayList;
 
 public class Path {
-	private ArrayList<Point> path = null;
+	private ArrayList<GraphPoint> path = null;
 	private boolean exist;
 	
 	public Path(){
-		path = new ArrayList<Point>();
+		path = new ArrayList<GraphPoint>();
 		exist = false;
 	}
 	public Path(boolean exist){
-		path = new ArrayList<Point>();
+		path = new ArrayList<GraphPoint>();
 		this.exist = exist;
 	}
 	
@@ -21,16 +21,16 @@ public class Path {
 		}
 		System.out.println();
 	}
-	public ArrayList<Point> getPath() {
+	public ArrayList<GraphPoint> getPath() {
 		return path;
 	}
 
-	public void setPath(ArrayList<Point> path) {
+	public void setPath(ArrayList<GraphPoint> path) {
 		this.path = path;
 	}
 	
 
-	public void add(Point point) {
+	public void add(GraphPoint point) {
 		// TODO Auto-generated method stub
 		this.path.add(point);
 	}

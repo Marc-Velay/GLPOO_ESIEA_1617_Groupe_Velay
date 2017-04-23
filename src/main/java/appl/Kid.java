@@ -1,20 +1,25 @@
-package GLPOO_ESIEA_1617.Groupe_Velay;
+package appl;
 
-import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 
 /**
  * Created by mat on 01/04/2017.
  */
-public class Kid extends Character {
+public class Kid extends Player {
     private GrapheAStar grapheAStar;
     private Path pathA;
-    private Point target;
+    private GraphPoint target;
+    private ArrayList<java.lang.Character> path;
+    private ArrayList<GameObjects> listEgg;
+    private JLabel Jname;
+    private JProgressBar jBar;
+    private char startDirection;
+    private int startPosX;
+    private int startPosY;
+    
     public ArrayList<java.lang.Character> getPath() {
         return path;
     }
@@ -23,8 +28,6 @@ public class Kid extends Character {
         this.path = path;
     }
 
-    private ArrayList<java.lang.Character> path;
-    private ArrayList<Egg> listEgg;
 
     public JLabel getJname() {
         return Jname;
@@ -34,7 +37,6 @@ public class Kid extends Character {
         Jname = jname;
     }
 
-    private JLabel Jname;
 
     public JProgressBar getjBar() {
         return jBar;
@@ -44,20 +46,15 @@ public class Kid extends Character {
         this.jBar = jBar;
     }
 
-    private JProgressBar jBar;
-
-    private char startDirection;
-    private int startPosX;
-    private int startPosY;
 
     public Kid(int max, int sizeX, int sizeY){
         path = new ArrayList<java.lang.Character>();
-        listEgg = new ArrayList<Egg>();
+        listEgg = new ArrayList<GameObjects>();
         jBar = new JProgressBar(0,max);
         Jname = new JLabel();
         grapheAStar = new GrapheAStar(sizeX, sizeY);
         pathA = new Path(false);
-        target = new Point();
+        target = new GraphPoint();
     }
 
     public void initPos(int posX, int posY, char direction){
@@ -68,21 +65,21 @@ public class Kid extends Character {
         setDirection(direction);
     }
 
-    protected boolean pickUp(MapObjects [][] gameMap){
-        final int nbEgg = gameMap[posY][posX].getNumberEggs();
+    protected boolean pickUp(GameObjects [][] gameMap){
+        final int nbEgg = gameMap[posY][posX].getNumEggs();
         System.out.println(nbEgg);
         if (nbEgg>0){
-            gameMap[posY][posX].setNumberEggs(nbEgg-1);
-            if (nbEgg-1==0) gameMap[posY][posX].setObj(Obj.KID);
-            listEgg.add(gameMap[posY][posX].getListEgg().get(0));
-            gameMap[posY][posX].getListEgg().remove(0);
+            gameMap[posY][posX].setNumEggs(nbEgg-1);
+            if (nbEgg-1==0) gameMap[posY][posX].setType(GameItemsList.Kid);
+            listEgg.add(gameMap[posY][posX]);
+            gameMap[posY][posX].setNumEggs(nbEgg-1);
             jBar.setValue(jBar.getValue()+1);
             return true;
         }
         return false;
     }
 
-    public void updatePath(ArrayList<Point> listEgg, MapObjects [][] gameMap){
+    public void updatePath(ArrayList<GraphPoint> listEgg, GameObjects [][] gameMap){
         findNextEgg(listEgg, gameMap);
         System.out.println("Update Path()");
         ArrayList<java.lang.Character> chemin = new ArrayList<>();
@@ -91,7 +88,7 @@ public class Kid extends Character {
             if (grapheAStar.isPathExist()){
                 this.setPathA(this.getGrapheAStar().FillPathA());
                 System.out.println(posX + " " +posY);
-                for (Point p : pathA.getPath()){
+                for (GraphPoint p : pathA.getPath()){
                     // NORD
                     if (p.getX() == posX && p.getY() == posY-1){
                         switch (direction){
@@ -168,19 +165,20 @@ public class Kid extends Character {
         }
     }
 
-    private void findNextEgg(ArrayList<Point> listEgg, MapObjects[][] gameMap) {
+    private void findNextEgg(ArrayList<GraphPoint> listEgg, GameObjects[][] gameMap) {
         int min = Integer.MAX_VALUE;
         int indMin = 0;
         int cpt = 0;
         System.out.println("Recherche de l'oeuf le plus proche");
         if (listEgg.size() > 0) {
-            for (Point p : listEgg){
+            for (GraphPoint p : listEgg){
+            	System.out.println(posX + " " + posY);
                 gameMap[p.getY()][p.getX()].getGrapheAStar().initAStar(gameMap, posX, posY, p.getX(), p.getY());
                 if (gameMap[p.getY()][p.getX()].getGrapheAStar().isPathExist()){
-                    gameMap[p.getY()][p.getX()].setDist(gameMap[p.getY()][p.getX()].getGrapheAStar().FillPathA().getPath().size());
+                    gameMap[p.getY()][p.getX()].setDistToPlayer(gameMap[p.getY()][p.getX()].getGrapheAStar().FillPathA().getPath().size());
                     System.out.println("Result Dist : == " + gameMap[p.getY()][p.getX()].getGrapheAStar().FillPathA().getPath().size() );
-                    if (gameMap[p.getY()][p.getX()].getDist() < min){
-                        min = gameMap[p.getY()][p.getX()].getDist();
+                    if (gameMap[p.getY()][p.getX()].getDistToPlayer() < min){
+                        min = gameMap[p.getY()][p.getX()].getDistToPlayer();
                         indMin = cpt;
                     }
                 }
@@ -193,7 +191,7 @@ public class Kid extends Character {
         } else pathA.setExist(false);
     }
 
-    public void move(MapObjects [][] gameMap){
+    public void move(GameObjects [][] gameMap){
         if (pickUp(gameMap)){
             System.out.println("Oeuf Ramassé");
         }
@@ -257,7 +255,7 @@ public class Kid extends Character {
             }
             System.out.println("Direction = " + direction);
         } else {
-            System.out.println("Path is empty" + listEgg);
+            System.out.println("Path is empty" /*+ listEgg*/);
 
         }
     }

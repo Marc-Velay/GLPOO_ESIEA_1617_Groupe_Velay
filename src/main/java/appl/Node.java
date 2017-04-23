@@ -1,4 +1,4 @@
-package GLPOO_ESIEA_1617.Groupe_Velay;
+package appl;
 
 public class Node {
 	private int y;
