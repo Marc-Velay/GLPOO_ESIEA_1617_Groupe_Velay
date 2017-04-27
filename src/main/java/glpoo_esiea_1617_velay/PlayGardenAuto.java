@@ -1,4 +1,4 @@
-package appl;
+package glpoo_esiea_1617_velay;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-public class PlayGarden extends JFrame implements ActionListener{
+public class PlayGardenAuto extends JFrame implements ActionListener{
 	/**
 	 * 
 	 */
@@ -41,9 +40,9 @@ public class PlayGarden extends JFrame implements ActionListener{
     
     
 
-    public PlayGarden() {
-        PlayGarden.listKid = new ArrayList<Kid>();
-        PlayGarden.listEgg = new ArrayList<GraphPoint>();
+    public PlayGardenAuto() {
+        PlayGardenAuto.listKid = new ArrayList<Kid>();
+        PlayGardenAuto.listEgg = new ArrayList<GraphPoint>();
         loadMap();
         System.out.println("map loaded");
         gameMap = new GameObjects[sizeY][sizeX];
@@ -108,8 +107,6 @@ public class PlayGarden extends JFrame implements ActionListener{
 
     protected void initUI(){
 
-        //map = new UI(sizeY,sizeX,blocSize,gameMap,listKid, listEgg);
-        //hud = new HUD(sizeX, sizeY, blocSize, sizeHUD);
     	gardenUI = PlayGardenUI.getInstance(sizeX, sizeY, blocSize, sizeHUD, gameMap, listKid);
         this.setTitle("Garden");
         this.setSize(sizeX*blocSize, sizeY*blocSize+40+sizeHUD);

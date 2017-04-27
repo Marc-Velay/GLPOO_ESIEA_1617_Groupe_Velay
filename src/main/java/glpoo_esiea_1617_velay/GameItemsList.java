@@ -1,4 +1,4 @@
-package appl;
+package glpoo_esiea_1617_velay;
 
 public enum GameItemsList {
 	Egg,

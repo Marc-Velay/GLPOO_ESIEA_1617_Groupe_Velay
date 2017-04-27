@@ -1,4 +1,4 @@
-package appl;
+package glpoo_esiea_1617_velay;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,6 +20,7 @@ public class Menu extends JFrame implements ActionListener{
     private JButton bBotPlay;
     private JButton bQuit;
 	private static Menu instance;
+	static boolean gameAuto;
 	
     public Menu(){
     	//Create game window
@@ -62,30 +63,24 @@ public class Menu extends JFrame implements ActionListener{
 	}
 
 	
-    public void actionPerformed(ActionEvent e) {
+    @SuppressWarnings("unused")
+	public void actionPerformed(ActionEvent e) {
     	//If the button Play is clicked, launch game
         if (e.getSource() == bPlay){
             System.out.println("Lancement d'une partie");
+            gameAuto = true;
             PlayGarden garden = new PlayGarden();
         }
         //If AI is selected launch game as automatic
         else if (e.getSource() == bBotPlay){
             System.out.println("Lancement d'une partie avec l'ordinateur");
-            /*
-            garden = new Garden();
-            garden.setMode(Mode.Auto);
-            garden.initUI();
-            garden.loadItems();
-            */
+            gameAuto = false;
+            PlayGardenAuto autoGarden = new PlayGardenAuto();
         }
         //If editor is selected launch editor
         else if (e.getSource() == bEditeur){
             System.out.println("Lancement de l'éditeur");
-            /*
-            garden = new Garden();
-            garden.setMode(Mode.Normal);
-            garden.initEditeur();
-            */
+            EditorGarden editor = new EditorGarden();
         }
         //If map selection is selected, launch picker
         else if (e.getSource() == bSelectMap){

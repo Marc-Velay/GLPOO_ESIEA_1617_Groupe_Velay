@@ -1,4 +1,4 @@
-package appl;
+package glpoo_esiea_1617_velay;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,8 +11,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -32,18 +32,12 @@ public class PlayGardenUI extends JPanel implements ActionListener{
     private Image kidS;
     private Image kidN;
     private Image kidPath;
-    private Image A;
-    private Image G;
-    private Image D;
     private Font font = new Font("Courier", Font.BOLD, 20);
     
     private int sizeX;
     private int sizeY;
     private int blocSize=25;
     private int sizeHUD;
-    private int kidActual;
-    private int kidMax;
-    private int etape;
     
 	private static PlayGardenUI instance;
     
@@ -70,12 +64,21 @@ public class PlayGardenUI extends JPanel implements ActionListener{
 	
 	public void initHUD() {
 		hud.setPreferredSize(new Dimension(sizeX,sizeHUD));
-        hud.setLayout(new GridLayout(PlayGarden.getListKid().size(), 2));
-        for (Kid kid : PlayGarden.getListKid()){
-            kid.getJname().setText(kid.getName());
-            hud.add(kid.getJname());
-            hud.add(kid.getjBar());
-        }
+		if(Menu.gameAuto == true) {
+	        hud.setLayout(new GridLayout(PlayGarden.getListKid().size(), 2));
+	        for (Kid kid : PlayGarden.getListKid()){
+	            kid.getJname().setText(kid.getName());
+	            hud.add(kid.getJname());
+	            hud.add(kid.getjBar());
+	        }
+		} else {
+	        hud.setLayout(new GridLayout(PlayGardenAuto.getListKid().size(), 2));
+	        for (Kid kid : PlayGardenAuto.getListKid()){
+	            kid.getJname().setText(kid.getName());
+	            hud.add(kid.getJname());
+	            hud.add(kid.getjBar());
+	        }
+		}
         hud.setVisible(true);
 	}
 
@@ -96,16 +99,20 @@ public class PlayGardenUI extends JPanel implements ActionListener{
         kidS = chargerImage("S1");
         kidN = chargerImage("N1");
         kidPath = chargerImage("path");
-        A  = chargerImage("A");
-        G  = chargerImage("G");
-        D  = chargerImage("D");
     }
 
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        afficheCarte(PlayGarden.getGameMap(), PlayGarden.getListKid(), g);
+        if(Menu.gameAuto == true) {
+            afficheCarte(PlayGarden.getGameMap(), PlayGarden.getListKid(), g);
+            afficheHud(PlayGarden.getListKid(), g);
+            this.revalidate();
+        } else {
+            afficheCarte(PlayGardenAuto.getGameMap(), PlayGardenAuto.getListKid(), g);
+            afficheHud(PlayGardenAuto.getListKid(), g);
+        }
         System.out.println("dans l'affichage");
     }
 
@@ -139,6 +146,17 @@ public class PlayGardenUI extends JPanel implements ActionListener{
         }
 
         drawKids(gameMap, listKid, g);
+    }
+    
+    public void afficheHud(ArrayList<Kid> listKid, Graphics g){
+    	hud.removeAll();
+    	for(Kid kid : listKid) {
+    		kid.getJname().setText(kid.getName());
+            hud.add(kid.getJname());
+            hud.add(kid.getjBar());
+    	}
+    	hud.revalidate();
+    	hud.setVisible(true);
     }
     
     private void drawKids(GameObjects[][] gameMap, ArrayList<Kid> listKid, Graphics g){
@@ -176,11 +194,18 @@ public class PlayGardenUI extends JPanel implements ActionListener{
     
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		PlayGarden.updateListEgg();
-        for (Kid kid : PlayGarden.getListKid()){
-            kid.move(PlayGarden.getGameMap());
-            kid.updatePath(PlayGarden.getListEgg(), PlayGarden.getGameMap());
-        }
+		if(Menu.gameAuto ==true) {
+			PlayGarden.updateListEgg();
+	        for (Kid kid : PlayGarden.getListKid()){
+	            kid.move(PlayGarden.getGameMap());
+	        }
+		} else {
+			PlayGardenAuto.updateListEgg();
+	        for (Kid kid : PlayGardenAuto.getListKid()){
+	            kid.move(PlayGardenAuto.getGameMap());
+	            kid.updatePath(PlayGardenAuto.getListEgg(), PlayGardenAuto.getGameMap());
+	        }
+		}
         System.out.println("repaint");
         repaint();
 		

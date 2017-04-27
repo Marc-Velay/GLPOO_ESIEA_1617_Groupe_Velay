@@ -1,4 +1,4 @@
-package appl;
+package glpoo_esiea_1617_velay;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,7 @@ public class Kid extends Player {
             if (nbEgg-1==0) gameMap[posY][posX].setType(GameItemsList.Kid);
             listEgg.add(gameMap[posY][posX]);
             gameMap[posY][posX].setNumEggs(nbEgg-1);
-            jBar.setValue(jBar.getValue()+1);
+            this.jBar.setValue(jBar.getValue()+1);
             return true;
         }
         return false;
