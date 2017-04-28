@@ -21,6 +21,12 @@ public class EditorTest {
 		assertNotNull(" Editor HUD not instanced !",EditorGardenHUD.getInstance(1, 1, 1, 1));
 	}
 	
-	
+	@Test
+	public void testEditorSizeSet() {
+		EditorGarden.setSizeX(1);
+		EditorGarden.setSizeY(1);
+		assertEquals(" Editor size x not properly set !",1,EditorGarden.getSizeX());
+		assertEquals(" Editor size y not properly set !",1,EditorGarden.getSizeY());
+	}
 
 }

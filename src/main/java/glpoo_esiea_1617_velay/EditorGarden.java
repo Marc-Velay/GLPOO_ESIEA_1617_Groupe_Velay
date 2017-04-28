@@ -152,6 +152,14 @@ public class EditorGarden extends JFrame implements ActionListener{
     	return gameMap;
     }
 
+    public static int getSizeX(){
+    	return sizeX;
+    }
+    
+    public static int getSizeY(){
+    	return sizeY;
+    }
+    
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub

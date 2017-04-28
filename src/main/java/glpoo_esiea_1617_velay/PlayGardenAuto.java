@@ -50,6 +50,7 @@ public class PlayGardenAuto extends JFrame implements ActionListener{
         loadItems();
         initUI();
         
+        
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -247,6 +248,7 @@ public class PlayGardenAuto extends JFrame implements ActionListener{
             System.out.println("Chargement d'un enfant en dehors du terrain");
         }
     }
+    
     
     public static GameObjects[][] getGameMap(){
     	return gameMap;

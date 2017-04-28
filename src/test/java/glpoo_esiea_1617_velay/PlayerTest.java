@@ -44,12 +44,12 @@ public class PlayerTest {
 		n.direction = 'A';
 		assertEquals("Could not get direction !",'A',n.direction);
 	}
-	/*
+	
 	@Test
 	public void testMoveTop() {
 		
 		Player n = new Player();
-		GameObjects fill = new GameObjects(10,10,1,1,GameItemsList.Empty);
+		GameObjects fill = new GameObjects(0,0,0,0,GameItemsList.Empty);
 		
 		GameObjects[][] gameMap = new GameObjects [10][10];
 		for(int i=0; i < 9; i++){
@@ -57,13 +57,13 @@ public class PlayerTest {
 				gameMap[i][j] = fill;
 			}
 		}
-		Kid kid = new Kid(1,1,1);
+		Kid kid = new Kid(0,0,0);
 		
 		n.posX = 5;
 		n.posY = 5;
 		n.moveTop(gameMap, kid);
 		
 		assertEquals("Didn't move up !",5-1,n.posY);
-	}*/
+	}
 	
 }
