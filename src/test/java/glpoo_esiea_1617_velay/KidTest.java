@@ -57,8 +57,7 @@ public class KidTest extends TestCase {
 	public void testStartDirection() {
 		Kid kid = new Kid(1,1,1);
 		kid.setStartDirection('A');
-		assertEquals("Could not get starting direction !",1,kid.getStartDirection());
+		assertEquals("Could not get starting direction !",'A',kid.getStartDirection());
 	}
-	
 	
 }	

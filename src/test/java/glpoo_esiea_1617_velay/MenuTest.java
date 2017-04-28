@@ -20,10 +20,5 @@ public class MenuTest {
 	public void testMenuInstance() {
 		assertNotNull("Could not instanciate Menu !",Menu.getInstance());
 	}
-	
-	@Test
-	public void testButtons() {
-		fail();
-	}
 
 }

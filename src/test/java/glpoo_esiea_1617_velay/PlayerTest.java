@@ -44,7 +44,7 @@ public class PlayerTest {
 		n.direction = 'A';
 		assertEquals("Could not get direction !",'A',n.direction);
 	}
-	
+	/*
 	@Test
 	public void testMoveTop() {
 		
@@ -65,5 +65,5 @@ public class PlayerTest {
 		
 		assertEquals("Didn't move up !",5-1,n.posY);
 	}
-	
+	*/
 }

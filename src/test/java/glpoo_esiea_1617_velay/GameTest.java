@@ -17,7 +17,7 @@ public class GameTest {
 	}
 
 	@Test
-	public void test() {
+	public void testImagePath() {
 		assertNotNull("Images non trouvées !", Game.IMGPATH);
 	}
 
