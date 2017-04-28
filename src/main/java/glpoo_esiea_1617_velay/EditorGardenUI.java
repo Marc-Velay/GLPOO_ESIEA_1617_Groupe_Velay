@@ -28,13 +28,13 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 	 * 
 	 */
 	private static final long serialVersionUID = 2016323681122277300L;
-	private static EditorGardenUI instance; // Singleton
-	private JButton bSave;
-	private JButton bPath;
-	private JButton bNext;
-	private JButton bPrev;
+	private static EditorGardenUI instance; 							// Singleton
+	private JButton bSave;												//Bouton Sauver
+	private JButton bPath;												//Bouton Chemin des Kid
+	private JButton bNext;												//Bouton Next
+	private JButton bPrev;												//Bouton Prev
 	private GameItemsList objActuel;
-	private Image objImgActuel;
+	private Image objImgActuel;											//Element sélectionné par la souris
 	private Image rock;
 	private Image terre;
 	private Image oeuf;
@@ -47,11 +47,11 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 	private Image arrowDown;
 	private Image arrowUp;
 	private Font font = new Font("Courier", Font.BOLD, 20);
-	private static int sizeX;
+	private static int sizeX;											
 	private static int sizeY;
 	private int blocSize;
-	private int xActuel;
-	private int yActuel;
+	private int xActuel;												//Coordonée x de la souris
+	private int yActuel;												//Coordonée y de la souris
 	private int xPathActuel;
 	private int yPathActuel;
 	private Kid kidActual;
@@ -60,7 +60,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 	private static GameObjects[][] gameMap;
 	private boolean BLOCKED = false;
 	private int etape;
-	private EditorGardenHUD hud;
+	private EditorGardenHUD hud;										
 
 	public EditorGardenUI(int sizeY, int sizeX, int blocSize,
 			GameObjects[][] gameMap, ArrayList<Kid> listKid, EditorGardenHUD hud) {
@@ -92,7 +92,16 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 		hud.setEtape(1);
 
 	}
-
+/**	Singleton de la classe EditorGardenUI
+ * 
+ * @param sizeX		largeur du jardin
+ * @param sizeY 	profondeur du jardin
+ * @param blocSize	Taille d'un bloc en pixels
+ * @param gameMap	Carte du Jardin
+ * @param listKid	Liste des enfants
+ * @param hud		HUD
+ * @return			Instance de EditorGardenUI
+ */
 	public static synchronized EditorGardenUI getInstance(int sizeX, int sizeY,
 			int blocSize, GameObjects[][] gameMap, ArrayList<Kid> listKid,
 			EditorGardenHUD hud) {
@@ -102,7 +111,11 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 		}
 		return instance;
 	}
-
+/**Charge l'image nomImg depuis le dossier "src/main/resources/Images/"
+ * 
+ * @param nomImg nom de l'image à charger
+ * @return L'image chargée
+ */
 	public Image chargerImage(String nomImg) {
 		Image img;
 		System.out.println(Game.IMGPATH + nomImg + ".png");
@@ -111,8 +124,8 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 				Image.SCALE_DEFAULT);
 		return img;
 	}
-
-	private void loadImages() {
+	
+	private void loadImages() { // Charge touts les images
 		rock = chargerImage("mur");
 		oeuf = chargerImage("oeuf");
 		terre = chargerImage("terre");
@@ -125,25 +138,21 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 		arrowUp = chargerImage("arrowUp");
 		arrowDown = chargerImage("arrowDown");
 	}
-
-	/*
-	 * @Override public void paintComponent(Graphics g) {
-	 * super.paintComponent(g); afficheCarte(PlayGarden.getGameMap(),
-	 * PlayGarden.getListKid(), g); System.out.println("dans l'affichage"); }
+	
+	/** Ordonne l'affichage de la carte
+	 * 
+	 * @param gameMap Carte du jardin
+	 * @param listKid List des Enfants
+	 * @param g 
 	 */
-
-	public void afficheCarte(GameObjects[][] gameMap, ArrayList<Kid> listKid,
+	private void afficheCarte(GameObjects[][] gameMap, ArrayList<Kid> listKid,
 			Graphics g) {
 		g.setFont(font);
 		g.setColor(Color.black);
 		int counter = 0;
 		for (int y = 0; y < sizeY; y++) {
 			for (int x = 0; x < sizeX; x++) {
-				afficherImage(terre, x * blocSize, y * blocSize, g); // On
-																		// affiche
-																		// la
-																		// terre
-																		// partout
+				afficherImage(terre, x * blocSize, y * blocSize, g); // On affiche la terre partout
 				// System.out.println(gameMap.length + " " + gameMap[0].length +
 				// gameMap[y][x].getType() + " counter: " + counter++);
 				if (gameMap[y][x].getType().equals(GameItemsList.Rock))
@@ -214,7 +223,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 		}
 	}
 
-	private void afficherImage(Image img, int x, int y, Graphics g) {
+	private void afficherImage(Image img, int x, int y, Graphics g) {	//Fonction d'affichage basique
 		g.drawImage(img, x, y, this);
 		Toolkit.getDefaultToolkit().sync();
 	}
@@ -225,9 +234,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 		// System.out.println("AFFICHAGE MAP");
 		// afficheMapConsole();
 		if (etape == 1) {
-			afficherImage(objImgActuel, xActuel, yActuel, g); // on affiche
-																// l'élément
-																// actuel
+			afficherImage(objImgActuel, xActuel, yActuel, g); // on affiche l'élément actuel
 			drawKids(gameMap, listKid, g);
 		}
 		if (etape == 2) {
@@ -288,7 +295,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
+	public void mouseMoved(MouseEvent arg0) { // Tracking de la souris
 		xActuel = arg0.getX() - blocSize / 2;
 		yActuel = arg0.getY() - blocSize;
 
@@ -562,7 +569,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
-		if (e.getSource() == bPath) {
+	if (e.getSource() == bPath) {// Si on clique sur le bouton "Chemin des Kis"
 			BLOCKED = true;
 			etape = 2;
 			this.remove(bPath);
@@ -583,7 +590,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 			hud.repaint();
 			BLOCKED = false;
 		}
-		if (e.getSource() == bNext) {
+		if (e.getSource() == bNext) { // On avance au Kid suivant 
 			BLOCKED = true;
 			kidNumber++;
 			if (listKid.size() == kidNumber) {
@@ -603,7 +610,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 			hud.repaint();
 			BLOCKED = false;
 		}
-		if (e.getSource() == bPrev) {
+		if (e.getSource() == bPrev) { // On revient en arrière sur le kid précédent
 			BLOCKED = true;
 			kidNumber--;
 			if (listKid.size() > kidNumber && kidNumber >= 0
@@ -624,7 +631,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 	}
 
 	@SuppressWarnings("unused")
-	private void saveMapAndKidMoves() {
+	private void saveMapAndKidMoves() {		
 		JOptionPane jop = new JOptionPane(), jop2 = new JOptionPane();
 		String nom = JOptionPane.showInputDialog(null,
 				"Rentrez le nom de la carte", "Request",
@@ -633,20 +640,18 @@ public class EditorGardenUI extends JPanel implements ActionListener,
 				"Message", JOptionPane.INFORMATION_MESSAGE);
 		File fmap = null, fkid = null;
 		
-		if ((new File("Ressources/map/")).mkdirs())
+		if ((new File("Ressources/map/")).mkdirs())		//Check si les dossier existe et création de ces derniers si besoin
 			fmap = new File("Ressources/map/" + nom);
 		else {
 			System.err.println("Cannot create directory map");
-			return;
 		}
 		if ((new File("Ressources/kid/")).mkdirs())
 			fkid = new File("Ressources/kid/" + nom);
 		else {
 			System.err.println("Cannot create directory kid");
-			return;
 		}
 
-		try {
+		try {	//Rempli les fichier à sauvegarder
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
 					fmap)));
 			pw.println("J " + sizeX + " " + sizeY);

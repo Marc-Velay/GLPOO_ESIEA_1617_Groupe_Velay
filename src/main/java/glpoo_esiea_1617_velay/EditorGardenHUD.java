@@ -121,7 +121,7 @@ public class EditorGardenHUD extends JPanel{
         D  = chargerImage("D");
     }
     
-    public Image chargerImage(String nomImg) {
+    private Image chargerImage(String nomImg) {
         Image img;
         System.out.println(Game.IMGPATH+nomImg+".png");
         ImageIcon imageIcon = new ImageIcon(Game.IMGPATH+nomImg+".png");
