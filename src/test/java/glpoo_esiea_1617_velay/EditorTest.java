@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MenuTest {
+public class EditorTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -17,13 +17,10 @@ public class MenuTest {
 	}
 
 	@Test
-	public void testMenuInstance() {
-		assertNotNull("Could not instanciate Menu !",Menu.getInstance());
+	public void testEditorHUDInstanced() {
+		assertNotNull(" Editor HUD not instanced !",EditorGardenHUD.getInstance(1, 1, 1, 1));
 	}
 	
-	@Test
-	public void testButtons() {
-		fail();
-	}
+	
 
 }

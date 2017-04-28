@@ -18,7 +18,7 @@ public class GameTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		assertNotNull("Images non trouvées !", Game.IMGPATH);
 	}
 
 }

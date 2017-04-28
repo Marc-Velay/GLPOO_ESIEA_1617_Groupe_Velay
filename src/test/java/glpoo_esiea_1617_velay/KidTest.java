@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("unused")
 public class KidTest extends TestCase {
 
 	@Before
@@ -33,7 +34,31 @@ public class KidTest extends TestCase {
 		kid.setStartPosX(1);
 		kid.setStartPosY(1);
 		assertEquals("Could not get X coordinate !",1,kid.getStartPosX());
-		assertEquals("Could not get Y coordinate !",1,kid.getStartPosX());
+		assertEquals("Could not get Y coordinate !",1,kid.getStartPosY());
 	}
+	
+	@Test
+	public void testSetGraph() {
+		Kid kid = new Kid(1,1,1);
+		GrapheAStar graph = new GrapheAStar(10,10);
+		kid.setGrapheAStar(graph);
+		assertNotNull("Could not set graph !",kid.getGrapheAStar());
+	}
+	
+	@Test
+	public void testPath() {
+		Kid kid = new Kid(1,1,1);
+		Path path = new Path(true);
+		kid.setPathA(path);
+		assertNotNull("Could not get path !",kid.getPathA());
+	}
+	
+	@Test
+	public void testStartDirection() {
+		Kid kid = new Kid(1,1,1);
+		kid.setStartDirection('A');
+		assertEquals("Could not get starting direction !",1,kid.getStartDirection());
+	}
+	
 	
 }	
