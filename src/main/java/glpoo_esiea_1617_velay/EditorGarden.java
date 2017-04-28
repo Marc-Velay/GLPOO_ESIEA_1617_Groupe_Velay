@@ -27,7 +27,7 @@ public class EditorGarden extends JFrame implements ActionListener{
 	private static int sizeY;
     private int blocSize = 50;
     private int sizeHUD = 150;
-    private int fps = 2;
+    private int fps = 60;
     private int maxEgg = 0;
 	private static GameObjects[][] gameMap;
 	private ArrayList<Kid> listKid;
@@ -59,7 +59,8 @@ public class EditorGarden extends JFrame implements ActionListener{
             this.setLocationRelativeTo(null);
             this.setVisible(true);
             this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+            
+            
             tRepaint = new Timer(1000 / fps, (ActionListener) editorUI);
             tRepaint.start();
             

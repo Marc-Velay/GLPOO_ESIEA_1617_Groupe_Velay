@@ -60,9 +60,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
     private boolean BLOCKED = false;
     private int etape;
     private EditorGardenHUD hud;
-	
-    private int test = 500; // A virer à la fin, variable de debug
-    
+	    
 	public EditorGardenUI(int sizeY, int sizeX, int blocSize, GameObjects[][] gameMap, ArrayList<Kid> listKid, EditorGardenHUD hud){
 		EditorGardenUI.sizeX = sizeX;
 		EditorGardenUI.sizeY = sizeY;
@@ -90,6 +88,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         etape = 1;
         this.listKid=listKid;
         hud.setEtape(1);
+        
 	}
 
     
@@ -138,7 +137,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
                 afficherImage(terre,x*blocSize,y*blocSize,g); // On affiche la terre partout     
-            	System.out.println(gameMap.length + " " + gameMap[0].length + gameMap[y][x].getType() + " counter: " + counter++);
+            	//System.out.println(gameMap.length + " " + gameMap[0].length + gameMap[y][x].getType() + " counter: " + counter++);
                 if (gameMap[y][x].getType().equals(GameItemsList.Rock))
                     afficherImage(rock,blocSize*x,blocSize*y,g);
                 else if (gameMap[y][x].getType().equals(GameItemsList.Egg)){
@@ -263,7 +262,8 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		xActuel = arg0.getX()-blocSize/2;
+		yActuel = arg0.getY() - blocSize;
 		
 	}
 
@@ -271,7 +271,6 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 

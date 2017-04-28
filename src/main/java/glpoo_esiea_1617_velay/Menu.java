@@ -28,6 +28,7 @@ public class Menu extends JFrame implements ActionListener{
         this.setSize(400,600);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        
         //Creation de la carte de jeu
         //garden = new Garden();
 
