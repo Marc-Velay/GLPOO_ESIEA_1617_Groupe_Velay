@@ -27,7 +27,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
 	 * 
 	 */
 	private static final long serialVersionUID = 2016323681122277300L;
-	private static EditorGardenUI instance;
+	private static EditorGardenUI instance;												//Singleton
 	private JButton bSave;
     private JButton bPath;
     private JButton bNext;
@@ -61,6 +61,8 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
     private int etape;
     private EditorGardenHUD hud;
 	
+    private int test = 500; // A virer à la fin, variable de debug
+    
 	public EditorGardenUI(int sizeY, int sizeX, int blocSize, GameObjects[][] gameMap, ArrayList<Kid> listKid, EditorGardenHUD hud){
 		EditorGardenUI.sizeX = sizeX;
 		EditorGardenUI.sizeY = sizeY;
@@ -83,7 +85,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         bPrev.setVisible(false);
         bNext.setVisible(false);
         bSave.setVisible(false);
-        objImgActuel = rock;
+        objImgActuel = null;
         objActuel = GameItemsList.Rock;
         etape = 1;
         this.listKid=listKid;
@@ -102,7 +104,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         Image img;
         System.out.println(Game.IMGPATH+nomImg+".png");
         ImageIcon imageIcon = new ImageIcon(Game.IMGPATH+nomImg+".png");
-        img = imageIcon.getImage().getScaledInstance(blocSize*2, blocSize*2, Image.SCALE_DEFAULT);
+        img = imageIcon.getImage().getScaledInstance(blocSize, blocSize, Image.SCALE_DEFAULT);
         return img;
     }
 
@@ -210,8 +212,6 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         if (etape == 2) {
             afficherChemin(g);
         }
-        
-        hud.draw(g,this);
     }
 
     private void afficherChemin(Graphics g) {
@@ -338,7 +338,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
                     System.out.println("CLIQUE DANS LE HUD" + sizeY);
                     if (e.getX() > blocSize / 2 && e.getX() < 3 * blocSize / 2) {
                         addSelected(1);
-                        objImgActuel = terre;
+                        objImgActuel = null;
                         objActuel = GameItemsList.Empty;
                     } else if (e.getX() > 3 * blocSize / 2 && e.getX() < 5 * blocSize / 2) {
                         addSelected(3);

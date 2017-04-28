@@ -45,7 +45,7 @@ public class EditorGarden extends JFrame implements ActionListener{
             listKid = new ArrayList<Kid>();
             initMap();
             hud = new EditorGardenHUD(sizeX, sizeY, blocSize, sizeHUD);
-           editorUI = new EditorGardenUI(sizeY, sizeX, blocSize, gameMap, listKid, hud);
+            editorUI = new EditorGardenUI(sizeY, sizeX, blocSize, gameMap, listKid, hud);
             KeyListener k = new KeyListener(editorUI);
             this.addKeyListener(k);
             this.setFocusable(true);
