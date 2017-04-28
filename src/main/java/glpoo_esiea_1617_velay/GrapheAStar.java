@@ -122,7 +122,7 @@ public class GrapheAStar {
 
 	}
 
-	// renvoi si le noeud est dans la liste en v�rifiant juste ses positions
+	// renvoi si le noeud est dans la liste en vérifiant juste ses positions
 	private boolean isContained(ArrayList<Node> L, Node A){
 		for (int i=0; i<L.size(); i++){
 			if (A.getX() == L.get(i).getX() && A.getY() == L.get(i).getY())

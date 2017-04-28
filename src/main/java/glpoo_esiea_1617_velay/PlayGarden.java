@@ -108,6 +108,7 @@ public class PlayGarden extends JFrame implements ActionListener{
     protected void initUI(){
 
     	gardenUI = PlayGardenUI.getInstance(sizeX, sizeY, blocSize, sizeHUD, gameMap, listKid);
+    	gardenUI.setSetMaxEgg(maxEgg);
         this.setTitle("Garden");
         this.setSize(sizeX*blocSize, sizeY*blocSize+40+sizeHUD);
         this.add(gardenUI, BorderLayout.CENTER);
@@ -172,10 +173,7 @@ public class PlayGarden extends JFrame implements ActionListener{
             final int nbEgg = java.lang.Character.toChars(number)[0];
             gameMap[posY][posX].setNumEggs(nbEgg);
             gameMap[posY][posX].setType(GameItemsList.Egg);
-            /*for (int egg = 0; egg < nbEgg; egg++) {
-                gameMap[posY][posX].getListEgg().add(new Egg());
-                maxEgg++;
-            }*/
+            maxEgg+=nbEgg;
         } else {
             System.out.println("Chargement d'un oeuf en dehors du terrain : WHAT A WASTE");
         }

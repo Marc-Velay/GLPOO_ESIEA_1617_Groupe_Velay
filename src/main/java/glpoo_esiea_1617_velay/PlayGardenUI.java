@@ -38,10 +38,11 @@ public class PlayGardenUI extends JPanel implements ActionListener{
     private int sizeY;
     private int blocSize=25;
     private int sizeHUD;
-    
+    private int setMaxEgg;
+
 	private static PlayGardenUI instance;
-    
-	public PlayGardenUI(int sizeX, int sizeY, int blocSize, int sizeHUD, GameObjects[][] gameMap, ArrayList<Kid> listKid) {
+
+    public PlayGardenUI(int sizeX, int sizeY, int blocSize, int sizeHUD, GameObjects[][] gameMap, ArrayList<Kid> listKid) {
     	loadImages();
     	this.setLayout(new BorderLayout());
 		this.sizeX = sizeX;
@@ -116,16 +117,6 @@ public class PlayGardenUI extends JPanel implements ActionListener{
         System.out.println("dans l'affichage");
     }
 
-
-    public void afficheMapConsole(GameObjects[][] gameMap) {
-        for (int y = 0; y<sizeY; y++){
-            for (int x = 0; x<sizeX; x++){
-                System.out.printf("%c",gameMap[y][x].getType());
-            }
-            System.out.println();
-        }
-    }
-
     public void afficheCarte(GameObjects[][] gameMap, ArrayList<Kid> listKid, Graphics g){
         g.setFont(font);
         g.setColor(Color.black);
@@ -198,6 +189,7 @@ public class PlayGardenUI extends JPanel implements ActionListener{
 			PlayGarden.updateListEgg();
 	        for (Kid kid : PlayGarden.getListKid()){
 	            kid.move(PlayGarden.getGameMap());
+	            System.out.println(kid.getjBar().getMaximum() +"Max");
 	        }
 		} else {
 			PlayGardenAuto.updateListEgg();
@@ -208,6 +200,17 @@ public class PlayGardenUI extends JPanel implements ActionListener{
 		}
         System.out.println("repaint");
         repaint();
-		
 	}
+
+	public void gameOver(){
+
+    }
+
+    public int getSetMaxEgg() {
+        return setMaxEgg;
+    }
+
+    public void setSetMaxEgg(int setMaxEgg) {
+        this.setMaxEgg = setMaxEgg;
+    }
 }
