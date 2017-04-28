@@ -1,6 +1,7 @@
 package glpoo_esiea_1617_velay;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -44,7 +45,7 @@ public class EditorGarden extends JFrame implements ActionListener{
             listKid = new ArrayList<Kid>();
             initMap();
             hud = new EditorGardenHUD(sizeX, sizeY, blocSize, sizeHUD);
-            editorUI = new EditorGardenUI(sizeY, sizeX, blocSize, gameMap, listKid, hud);
+           editorUI = new EditorGardenUI(sizeY, sizeX, blocSize, gameMap, listKid, hud);
             KeyListener k = new KeyListener(editorUI);
             this.addKeyListener(k);
             this.setFocusable(true);
@@ -61,6 +62,7 @@ public class EditorGarden extends JFrame implements ActionListener{
 
             tRepaint = new Timer(1000 / fps, (ActionListener) editorUI);
             tRepaint.start();
+            
         }
 	}
 	
@@ -110,9 +112,9 @@ public class EditorGarden extends JFrame implements ActionListener{
             gameMap[y][sizeX-1].setOccupied(true);
             gameMap[y][sizeX-1].setType(GameItemsList.Rock);
         }
+        
     }
-
-
+    
     private boolean loadMapEditeur() {
         AskDialog askDialog = new AskDialog(null, "Taille de la carte", true);
         while (!askDialog.isOver()){
@@ -134,13 +136,18 @@ public class EditorGarden extends JFrame implements ActionListener{
         }
 
     }
-
+    
+    //Setters
+    
     public static void setSizeX(int sizeX){
     	EditorGarden.sizeX = sizeX;
     }
     public static void setSizeY(int sizeY){
     	EditorGarden.sizeY = sizeY;
     }
+    
+    //Getters
+    
     public static GameObjects[][] getGameMap(){
     	return gameMap;
     }

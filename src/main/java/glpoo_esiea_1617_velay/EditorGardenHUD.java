@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -57,25 +56,26 @@ public class EditorGardenHUD extends JPanel{
 		return instance;
 	}
 	
-	private void afficherImage(Image img, int x, int y, Graphics g) {
-        g.drawImage(img, x, y, this);
+	private void afficherImage(Image img, int x, int y, Graphics g, JPanel p) {
+        g.drawImage(img, x, y, p);
         Toolkit.getDefaultToolkit().sync();
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        afficheEditeur(g);
+
+    public void draw(Graphics g, JPanel p){
+        afficheEditeur(g,p);
     }
 
-    public void afficheEditeur(Graphics g){
+    public void afficheEditeur(Graphics g, JPanel p){
         if (etape == 1) {
-            afficherImage(terre,blocSize/2,sizeY+blocSize,g);
-            afficherImage(rock,3*blocSize/2,sizeY+blocSize,g);
-            afficherImage(oeuf,5*blocSize/2,sizeY+blocSize,g);
-            afficherImage(kidE,7*blocSize/2,sizeY+blocSize,g);
-            afficherImage(kidN,9*blocSize/2,sizeY+blocSize,g);
-            afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g);
-            afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g);
+            afficherImage(terre,/*blocSize/2*/300,/*sizeY * blocSize + 40*/300,g,p);
+            afficherImage(rock,3*blocSize/2,sizeY+blocSize,g,p);
+            afficherImage(oeuf,5*blocSize/2,sizeY+blocSize,g,p);
+            afficherImage(kidE,7*blocSize/2,sizeY+blocSize,g,p);
+            afficherImage(kidN,9*blocSize/2,sizeY+blocSize,g,p);
+            afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g,p);
+            afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g,p);
+            
         } else if (etape == 2) {
             System.out.println("REFRESH");
             g.setFont(font);
@@ -93,13 +93,13 @@ public class EditorGardenHUD extends JPanel{
                     }
                     switch (c) {
                         case 'A':
-                            afficherImage(A, x * blocSize, y * blocSize, g);
+                            afficherImage(A, x * blocSize, y * blocSize, g,p);
                             break;
                         case 'G':
-                            afficherImage(G, x * blocSize, y * blocSize, g);
+                            afficherImage(G, x * blocSize, y * blocSize, g,p);
                             break;
                         case 'D':
-                            afficherImage(D, x * blocSize, y * blocSize, g);
+                            afficherImage(D, x * blocSize, y * blocSize, g,p);
                             break;
                     }
                 }
@@ -119,11 +119,11 @@ public class EditorGardenHUD extends JPanel{
         G  = chargerImage("G");
         D  = chargerImage("D");
     }
-
+    
     public Image chargerImage(String nomImg) {
         Image img;
-        System.out.println("Ressources/Images/"+nomImg+".png");
-        ImageIcon imageIcon = new ImageIcon("Ressources/Images/"+nomImg+".png");
+        System.out.println("src/main/resources/Images/"+nomImg+".png");
+        ImageIcon imageIcon = new ImageIcon("src/main/resources/Images/"+nomImg+".png");
         img = imageIcon.getImage().getScaledInstance(blocSize, blocSize, Image.SCALE_DEFAULT);
         return img;
     }

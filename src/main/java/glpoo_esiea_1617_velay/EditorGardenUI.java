@@ -61,7 +61,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
     private int etape;
     private EditorGardenHUD hud;
 	
-	public EditorGardenUI(int sizeX, int sizeY, int blocSize, GameObjects[][] gameMap, ArrayList<Kid> listKid, EditorGardenHUD hud){
+	public EditorGardenUI(int sizeY, int sizeX, int blocSize, GameObjects[][] gameMap, ArrayList<Kid> listKid, EditorGardenHUD hud){
 		EditorGardenUI.sizeX = sizeX;
 		EditorGardenUI.sizeY = sizeY;
 		this.blocSize = blocSize;
@@ -86,6 +86,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         objImgActuel = rock;
         objActuel = GameItemsList.Rock;
         etape = 1;
+        this.listKid=listKid;
         hud.setEtape(1);
 	}
 
@@ -135,7 +136,7 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         for (int y = 0; y<sizeY; y++){
             for (int x = 0; x<sizeX; x++){
                 afficherImage(terre,x*blocSize,y*blocSize,g); // On affiche la terre partout     
-            	System.out.println(gameMap.length + " " + gameMap[0].length + gameMap[x][y].getType() + " counter: " + counter++);
+            	System.out.println(gameMap.length + " " + gameMap[0].length + gameMap[y][x].getType() + " counter: " + counter++);
                 if (gameMap[y][x].getType().equals(GameItemsList.Rock))
                     afficherImage(rock,blocSize*x,blocSize*y,g);
                 else if (gameMap[y][x].getType().equals(GameItemsList.Egg)){
@@ -209,6 +210,8 @@ public class EditorGardenUI extends JPanel implements ActionListener,MouseListen
         if (etape == 2) {
             afficherChemin(g);
         }
+        
+        hud.draw(g,this);
     }
 
     private void afficherChemin(Graphics g) {
