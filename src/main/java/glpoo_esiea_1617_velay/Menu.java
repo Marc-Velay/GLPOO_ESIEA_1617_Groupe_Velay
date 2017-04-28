@@ -28,6 +28,7 @@ public class Menu extends JFrame implements ActionListener{
         this.setSize(400,600);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        
         //Creation de la carte de jeu
         //garden = new Garden();
 
@@ -67,29 +68,52 @@ public class Menu extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
     	//If the button Play is clicked, launch game
         if (e.getSource() == bPlay){
+            this.setVisible(false);
             System.out.println("Lancement d'une partie");
             gameAuto = true;
             PlayGarden garden = new PlayGarden();
+            garden.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    setVisible(true);
+                }
+            });
         }
         //If AI is selected launch game as automatic
         else if (e.getSource() == bBotPlay){
+            this.setVisible(false);
             System.out.println("Lancement d'une partie avec l'ordinateur");
             gameAuto = false;
             PlayGardenAuto autoGarden = new PlayGardenAuto();
+            autoGarden.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    setVisible(true);
+                }
+            });
         }
         //If editor is selected launch editor
         else if (e.getSource() == bEditeur){
+            this.setVisible(false);
             System.out.println("Lancement de l'éditeur");
             EditorGarden editor = new EditorGarden();
+            editor.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    setVisible(true);
+                }
+            });
         }
         //If map selection is selected, launch picker
         else if (e.getSource() == bSelectMap){
+            this.setVisible(false);
             System.out.println("Choix de la carte et des enfants");
             // affichage presque OK En faire quelque chose choix de la map mode auto ou pas
             // correction des bugs a faire
         }
         //Exit the game
         else if (e.getSource() == bQuit){
+            this.setVisible(false);
             System.out.println("Exit");
             this.dispose();
             System.exit(0);

@@ -11,7 +11,6 @@ public class KeyListener implements java.awt.event.KeyListener{
 
     public KeyListener(EditorGardenUI carte){
         this.carte = carte;
-        System.out.println("INIKEY");
     }
 
     public void keyPressed(KeyEvent e) {

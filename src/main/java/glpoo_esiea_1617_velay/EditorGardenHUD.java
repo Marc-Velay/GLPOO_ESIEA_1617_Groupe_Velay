@@ -62,19 +62,20 @@ public class EditorGardenHUD extends JPanel{
     }
 
 
-    public void draw(Graphics g, JPanel p){
-        afficheEditeur(g,p);
+    public void paintComponent(Graphics g){
+    	super.paintComponent(g);
+        afficheEditeur(g);
     }
 
-    public void afficheEditeur(Graphics g, JPanel p){
+    public void afficheEditeur(Graphics g){
         if (etape == 1) {
-            afficherImage(terre,/*blocSize/2*/300,/*sizeY * blocSize + 40*/300,g,p);
-            afficherImage(rock,3*blocSize/2,sizeY+blocSize,g,p);
-            afficherImage(oeuf,5*blocSize/2,sizeY+blocSize,g,p);
-            afficherImage(kidE,7*blocSize/2,sizeY+blocSize,g,p);
-            afficherImage(kidN,9*blocSize/2,sizeY+blocSize,g,p);
-            afficherImage(kidW,11*blocSize/2,sizeY+blocSize,g,p);
-            afficherImage(kidS,13*blocSize/2,sizeY+blocSize,g,p);
+            afficherImage(terre,blocSize/2, blocSize,g,this);
+            afficherImage(rock,3*blocSize/2,blocSize,g,this);
+            afficherImage(oeuf,5*blocSize/2,blocSize,g,this);
+            afficherImage(kidE,7*blocSize/2,blocSize,g,this);
+            afficherImage(kidN,9*blocSize/2,blocSize,g,this);
+            afficherImage(kidW,11*blocSize/2,blocSize,g,this);
+            afficherImage(kidS,13*blocSize/2,blocSize,g,this);
             
         } else if (etape == 2) {
             System.out.println("REFRESH");
@@ -93,13 +94,13 @@ public class EditorGardenHUD extends JPanel{
                     }
                     switch (c) {
                         case 'A':
-                            afficherImage(A, x * blocSize, y * blocSize, g,p);
+                            afficherImage(A, x * blocSize, y * blocSize, g,this);
                             break;
                         case 'G':
-                            afficherImage(G, x * blocSize, y * blocSize, g,p);
+                            afficherImage(G, x * blocSize, y * blocSize, g,this);
                             break;
                         case 'D':
-                            afficherImage(D, x * blocSize, y * blocSize, g,p);
+                            afficherImage(D, x * blocSize, y * blocSize, g,this);
                             break;
                     }
                 }
@@ -120,7 +121,7 @@ public class EditorGardenHUD extends JPanel{
         D  = chargerImage("D");
     }
     
-    public Image chargerImage(String nomImg) {
+    private Image chargerImage(String nomImg) {
         Image img;
         System.out.println(Game.IMGPATH+nomImg+".png");
         ImageIcon imageIcon = new ImageIcon(Game.IMGPATH+nomImg+".png");
